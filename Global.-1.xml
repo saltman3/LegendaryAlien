@@ -1,0 +1,168 @@
+<Defaults>
+    <Panel class="WindowBorder"
+      outline="#635351" color="#bbbbbb"
+      width="800" height="520"
+      showAnimation="Grow" hideAnimation="Shrink"
+      returnToOriginalPositionWhenReleased="false"
+      allowDragging="true" />
+    <Row class="MenuBar" color="#FFFFFF" />
+    <Button class="movies" width="100" height="100" color="#FFFFFF" />
+    <Button class="topButtons" width="25" height="25" rectAlignment="UpperLeft" />
+    <Text class="UIText" fontSize="18" fontStyle="Bold" color="#000000" />
+    <TableLayout class="items"
+       rectAlignment="UpperRight" cellPadding="5" />
+    <!-- <Button class="FAB" height="30" width="230" active="true" /> -->
+    <ToggleGroup  height="25" />
+    <Text class="section1" fontSize="17" fontStyle="Bold"/>
+    <text class="section1" fontStyle="Bold"/>
+
+    <Panel
+      class="info-dialog"
+      width="400" height="445"
+      offsetXY = "550 50"
+      outline="#635351" color="#bbbbbb"
+      showAnimation="Grow" hideAnimation="Shrink"
+      rectAlignment="MiddleLeft"
+      returnToOriginalPositionWhenReleased="false" allowDragging="true"/>
+    <text class="dialog-title" rectAlignment="UpperCenter" fontSize="18"
+      fontStyle="Bold" color="#000000" />
+    <TableLayout class="dialog-table" rectAlignment="UpperRight" cellPadding="8" />
+    <button class="top-buttons" width="25" height="25" rectAlignment="UpperLeft"
+            color="#990000" textColor="#FFFFFF" />
+    <text class="message" alignment="MiddleLeft" />
+    <button class="close-dialog" minWidth="70" minHeight="40" />
+</Defaults>
+
+<Panel id="SetupPanel" class="WindowBorder">
+  <TableLayout >
+    <Row id="MenuBar" class="MenuBar" dontUseTableRowBackground="true"
+      color="#0089EA" preferredHeight="28">
+      <Text id="WindowTitle" text="Setup" class="UIText"
+        rectAlignment="UpperCenter" />
+      <Button id="closeButton" class="topButtons" color="#990000" rectAlignment="UpperRight"
+        textColor="#FFFFFF" text="X" onClick="closePanel" />
+    </Row>
+    <HorizontalLayout>
+        <Row>
+          <GridLayout childAlignment ="UpperCenter" cellSize="250 450" padding="50 20 50 20">
+              <VerticalLayout>
+                <Text class="section1">Choose Movie</Text>
+                  <ToggleButton class="movies" onClick="ToggleMovie1" id="Movie1Button">
+                      Alien
+                  </ToggleButton>
+                  <ToggleButton class="movies" onClick="ToggleMovie2" id="Movie2Button">
+                      Aliens
+                  </ToggleButton>
+                  <ToggleButton class="movies" onClick="ToggleMovie3" id="Movie3Button">
+                      <Text >Alien 3</Text>
+                  </ToggleButton>
+                  <ToggleButton class="movies" onClick="ToggleMovie4" id="Movie4Button">
+                      Alien 4
+                  </ToggleButton>
+                  <ToggleButton class="movies" onClick="ToggleMovie5" id="Movie5Button">
+                      Alien Incursion (The Aviary) (Expansion)
+                  </ToggleButton>
+                  <ToggleButton class="movies" onClick="ToggleMovie6" id="Movie6Button">
+                      Alien Evolved (Echidna Station) (Expansion)
+                  </ToggleButton>
+                  <ToggleButton class="movies" onClick="ToggleMovie7" id="Movie7Button">
+                      Alien Covenant (Expansion)
+                  </ToggleButton>
+                  <ToggleButton class="movies" onClick="ToggleMovie8" id="Movie8Button">
+                      Predator
+                  </ToggleButton>
+                  <ToggleButton class="movies" onClick="ToggleMovie9" id="Movie9Button">
+                      Predator 2
+                  </ToggleButton>
+              </VerticalLayout>
+          </GridLayout>
+        </Row>
+
+        <Row>
+            <GridLayout childAlignment ="UpperLeft" cellSize="200 130" padding="20 20 63 20">
+                <VerticalLayout>
+                    <Text class="section1">Setup Options</Text>
+                    <Toggle isOn="false" onValueChanged="ToggleExpansionDrones">
+                       <text>Use expansion Drones</text>
+                    </Toggle>
+                    <Toggle isOn="false" onValueChanged="ToggleExpansionStrikes">
+                       <text>Use expansion Strikes</text>
+                    </Toggle>
+                    <Toggle isOn="true" onValueChanged="ToggleRemovePlayers">
+                       <text>Remove unseated players</text>
+                    </Toggle>
+
+                </VerticalLayout>
+            </GridLayout>
+        </Row>
+
+        <Row>
+            <GridLayout childAlignment ="MiddleLeft" cellSize="250 400" padding="20 20 40 20">
+                <VerticalLayout>
+                    <Text class="section1" spacing="10">Avatar Options</Text>
+                    <Toggle isOn="false" onValueChanged="ToggleRandomizeAvatars">
+                       <text>Randomize Avatars</text>
+                    </Toggle>
+                    <Toggle isOn="true" onValueChanged="ToggleBaseAvatars" interactable="false" id="ToggleButtonBaseAvatars">
+                       <text>Use base Avatars</text>
+                    </Toggle>
+                    <Toggle isOn="true" onValueChanged="ToggleExpAvatars" interactable="false" id="ToggleButtonExpAvatars">
+                       <text>Use expansion Avatars</text>
+                    </Toggle>
+                    <Toggle isOn="true" onValueChanged="ToggleCovAvatars" interactable="false" id="ToggleButtonCovAvatars">
+                       <text>Use Covenant Avatars</text>
+                    </Toggle>
+                    <Toggle isOn="true" onValueChanged="TogglePredatorAvatars" interactable="false" id="ToggleButtonPredAvatars">
+                       <text>Use Predator Avatars</text>
+                    </Toggle>
+                    <Toggle isOn="true" onValueChanged="TogglePredator2Avatars" interactable="false" id="ToggleButtonPred2Avatars">
+                       <text>Use Predator 2 Avatars</text>
+                    </Toggle>
+                    <Text class="section1">Barracks Options</Text>
+
+                    <Toggle isOn="false" onValueChanged="ToggleRandomBarracks">
+                       <text>Randomize Barracks</text>
+                    </Toggle>
+
+                    <Toggle isOn="true" onValueChanged="ToggleBaseGameBarracks" interactable="false" id="ToggleButtonBaseGameBarracks">
+                       <text>Include base game characters</text>
+                    </Toggle>
+                    <Toggle isOn="true" onValueChanged="ToggleExpansionBarracks" interactable="false" id="ToggleButtonExpansionBarracks">
+                       <text>Include expansion characters</text>
+                    </Toggle>
+
+                    <Toggle isOn="true" onValueChanged="ToggleCovenantBarracks" interactable="false" id="ToggleButtonCovenantBarracks">
+                       <text>Include Covenant characters</text>
+                    </Toggle>
+
+                    <Toggle isOn="true" onValueChanged="TogglePredatorBarracks" interactable="false" id="ToggleButtonPredatorBarracks">
+                       <text>Include Predator characters</text>
+                    </Toggle>
+              </VerticalLayout>
+          </GridLayout>
+        </Row>
+    </HorizontalLayout>
+    </TableLayout>
+     <TableLayout >A
+         <VerticalLayout>
+             <Row/>
+             <Row>
+                 <Button class="movies" onClick="StartGame">Start Game</Button>
+             </Row>
+          </VerticalLayout>
+    </TableLayout>
+</Panel>
+<Panel id="info-dialog" class="info-dialog" active="false">
+  <TableLayout class="dialog-table">
+    <row class="title-bar" dontUseTableRowBackground="true">
+      <button class="top-buttons" onClick="infoDialogClose"> X </button>
+    </row>
+    <row>
+      <cell>
+        <VerticalLayout childForceExpandHeight="false" spacing="20">
+          <button class="close-dialog" onClick="infoDialogClose"> Close </button>
+        </VerticalLayout>
+      </cell>
+    </row>
+  </TableLayout>
+</Panel>
