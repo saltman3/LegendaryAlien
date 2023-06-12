@@ -1,0 +1,2567 @@
+function onload()
+numTimers = 0
+
+--PLAY AREA--
+StrikesDeck = getObjectFromGUID("963384")
+SergeantDeck = getObjectFromGUID("5213e6")
+Objective = getObjectFromGUID("58a60d")
+Hive = getObjectFromGUID("44e514")
+Location = getObjectFromGUID("233ca6")
+Barracks = getObjectFromGUID("ae55f0")
+HQ1 = getObjectFromGUID("c2de73")
+HQ2 = getObjectFromGUID("4476a3")
+HQ3 = getObjectFromGUID("886684")
+HQ4 = getObjectFromGUID("49d1ec")
+HQ5 = getObjectFromGUID("39d6f7")
+DiscardedHazards = getObjectFromGUID("ae65de")
+DeadEnemies = getObjectFromGUID("72db01")
+Hatchery = getObjectFromGUID("81b2be")
+BoardBag = getObjectFromGUID("aeb95f")
+
+BoardPosition = { -1.79, 1.07, 2.9 }
+
+DroneDeckAmounts = ({
+    {0, 0, 0},
+    {0, 1, 2},
+    {2, 3, 4},
+    {4, 5, 6},
+    {4, 5, 6}
+})
+
+TheHQ = ({
+    HQ1,
+    HQ2,
+    HQ3,
+    HQ4,
+    HQ5
+})
+
+        --GENERAL SETUP--
+AlienSergeants = getObjectFromGUID("276a87")
+PredatorSergeants = getObjectFromGUID("bd813e")
+AlienDroneDeck = getObjectFromGUID("60cb24")
+DroneDeckExp = getObjectFromGUID("da8b27")
+PredatorDroneDeck = getObjectFromGUID("f8552a")
+ExpansionStrikes = getObjectFromGUID("e54364")
+AlienStrikeDeck = getObjectFromGUID("b21434")
+PredatorStrikeDeck = getObjectFromGUID("1c5dc0")
+HatcheryDeck = getObjectFromGUID("1cd4cb")
+Complex1 = getObjectFromGUID("bb4b29")
+Complex2 = getObjectFromGUID("828d27")
+Complex3 = getObjectFromGUID("ac3d6a")
+Complex4 = getObjectFromGUID("32a1f3")
+Complex5 = getObjectFromGUID("80c84d")
+CombatZone1 = getObjectFromGUID("4ce3a0")
+CombatZone2 = getObjectFromGUID("952cbe")
+CombatZone3 = getObjectFromGUID("1816a5")
+Operations1 = getObjectFromGUID("c6f84a")
+Operations2 = getObjectFromGUID("bbcfd1")
+
+ExpansionDronesSelected = false
+CovenantDronesSelected = false
+RandomizeAvatarsSelected = false
+BaseAvatarsSelected = true
+ExpansionAvatarsSelected = true
+CovenantAvatarsSelected = true
+PredatorAvatarsSelected = true
+Predator2AvatarsSelected = true
+ExpansionStrikesSelected = false
+RandomBarracksSelected = false
+BaseBarracksSelected = true
+ExpansionBarracksSelected = true
+CovenantBarracksSelected = true
+PredatorBarracksSelected = true
+AlienMovieSelected = false
+RemoveUnseatedPlayers = true
+BoardSelected = "Alien"
+HiveDeckRanOut = false
+
+SOSPartFound = false
+HazardCount = 0
+
+Movie1Selected = false
+Movie2Selected = false
+Movie3Selected = false
+Movie4Selected = false
+Movie5Selected = false
+Movie6Selected = false
+Movie7Selected = false
+Movie8Selected = false
+Movie9Selected = false
+
+MovieSelected = ({
+    Movie1Selected,
+    Movie2Selected,
+    Movie3Selected,
+    Movie4Selected,
+    Movie5Selected,
+    Movie6Selected,
+    Movie7Selected,
+    Movie8Selected,
+    Movie9Selected
+})
+
+MovieButtons = ({
+    "Movie1Button",
+    "Movie2Button",
+    "Movie3Button",
+    "Movie4Button",
+    "Movie5Button",
+    "Movie6Button",
+    "Movie7Button",
+    "Movie8Button",
+    "Movie9Button"
+})
+
+Sergeants = ({
+    AlienSergeants,
+    PredatorSergeants
+})
+
+Strikes = ({
+    AlienStrikeDeck,
+    PredatorStrikeDeck
+})
+
+Drones = ({
+    AlienDroneDeck,
+    PredatorDroneDeck
+})
+
+Operations = ({
+    Operations1,
+    Operations2
+})
+
+Complexes = ({
+    Complex1,
+    Complex2,
+    Complex3,
+    Complex4,
+    Complex5
+})
+        --NON INTERACTABLE OBJECTS--
+RedPlayBoard = getObjectFromGUID("66fd64")
+RedPlayBoard.interactable = false
+RedStrikes = getObjectFromGUID("7b5baf")
+RedStrikes.interactable = false
+RedDraw = getObjectFromGUID("3d84f0")
+RedDraw.interactable = false
+RedAvatar = getObjectFromGUID("3313bb")
+RedAvatar.interactable = false
+RedDiscard = getObjectFromGUID("810273")
+RedDiscard.interactable = false
+PurplePlayBoard = getObjectFromGUID("60d9ca")
+PurplePlayBoard.interactable = false
+PurpleStrikes = getObjectFromGUID("692af0")
+PurpleStrikes.interactable = false
+PurpleDraw = getObjectFromGUID("74fa8f")
+PurpleDraw.interactable = false
+PurpleAvatar = getObjectFromGUID("0ba496")
+PurpleAvatar.interactable = false
+PurpleDiscard = getObjectFromGUID("4cd4b1")
+PurpleDiscard.interactable = false
+GreenPlayBoard = getObjectFromGUID("526e37")
+GreenPlayBoard.interactable = false
+GreenStrikes = getObjectFromGUID("4cefbf")
+GreenStrikes.interactable = false
+GreenDraw = getObjectFromGUID("0789ec")
+GreenDraw.interactable = false
+GreenAvatar = getObjectFromGUID("855b44")
+GreenAvatar.interactable = false
+GreenDiscard = getObjectFromGUID("23d999")
+GreenDiscard.interactable = false
+WhitePlayBoard = getObjectFromGUID("287b8b")
+WhitePlayBoard.interactable = false
+WhiteStrikes = getObjectFromGUID("12bbf8")
+WhiteStrikes.interactable = false
+WhiteDraw = getObjectFromGUID("ab8729")
+WhiteDraw.interactable = false
+WhiteAvatar = getObjectFromGUID("abb6ad")
+WhiteAvatar.interactable = false
+WhiteDiscard = getObjectFromGUID("b9bc82")
+WhiteDiscard.interactable = false
+BluePlayBoard = getObjectFromGUID("3aa5dd")
+BluePlayBoard.interactable = false
+BlueStrikes = getObjectFromGUID("dc25fa")
+BlueStrikes.interactable = false
+BlueDraw = getObjectFromGUID("e3b464")
+BlueDraw.interactable = false
+BlueAvatar = getObjectFromGUID("4c3f48")
+BlueAvatar.interactable = false
+BlueDiscard = getObjectFromGUID("e1deb0")
+BlueDiscard.interactable = false
+MainTable = getObjectFromGUID("d7b6e1")
+MainTable.interactable = false
+MaintTableLegs = getObjectFromGUID("a96cb3")
+MaintTableLegs.interactable = false
+ObjectiveTable = getObjectFromGUID("336d7c")
+ObjectiveTable.interactable = false
+HardModeTable = getObjectFromGUID("7de9b9")
+HardModeTable.interactable = false
+AvatarAndBarracksTable = getObjectFromGUID("c4ca85")
+AvatarAndBarracksTable.interactable = false
+MotherAlienTable = getObjectFromGUID("506773")
+MotherAlienTable.interactable = false
+
+        --LOCATIONS--
+Nostromo = getObjectFromGUID("b2a7b1")
+HadleysHope = getObjectFromGUID("518e19")
+Fury = getObjectFromGUID("18cfc0")
+Auriga = getObjectFromGUID("171d3b")
+Aviary = getObjectFromGUID("ca4739")
+Echiona = getObjectFromGUID("d59b60")
+Planet4 = getObjectFromGUID("3e039a")
+ValVerdeanJungle = getObjectFromGUID("612452")
+LosAngeles = getObjectFromGUID("6bdfab")
+ChosenLocation = nil
+
+        --OBJECTIVES, DRONES--
+Movie1Obj = getObjectFromGUID("c528d4")
+Movie2Obj = getObjectFromGUID("8a60bf")
+Movie3Obj = getObjectFromGUID("affd85")
+Movie4Obj = getObjectFromGUID("5a2262")
+Movie5Obj = getObjectFromGUID("379e64")
+Movie6Obj = getObjectFromGUID("983f6d")
+Movie7Obj = getObjectFromGUID("a1d5b7")
+Movie8Obj = getObjectFromGUID("60e9f5")
+Movie9Obj = getObjectFromGUID("db906f")
+--movie 1
+SOS = getObjectFromGUID("27b322")
+NoOneCanHearYouScream = getObjectFromGUID("49b42d")
+PerfectOrganism = getObjectFromGUID("dff99f")
+--movie 2
+LastColony = getObjectFromGUID("018b01")
+MostlyComeAtNight = getObjectFromGUID("508bb8")
+WhosLayingEggs = getObjectFromGUID("d1fc36")
+--movie 3
+WhereAreTheBrothers = getObjectFromGUID("9e6e4e")
+BeastIsOutThere = getObjectFromGUID("408edd")
+NobodyCanStopIt = getObjectFromGUID("46b193")
+--movie 4
+Breakout = getObjectFromGUID("a0b5ab")
+YoureAThing = getObjectFromGUID("4b7f13")
+ShellBreed = getObjectFromGUID("128194")
+--movie 5
+StrangeBehavior = getObjectFromGUID("39dc15")
+NewResidents = getObjectFromGUID("439743")
+RulerOfTheRoost = getObjectFromGUID("c98bde")
+--movie 6
+Incubators = getObjectFromGUID("7e82b7")
+ReleaseTheHounds = getObjectFromGUID("d192e5")
+FinalCreation = getObjectFromGUID("f4ef5c")
+--Movie 7
+RogueTransmission = getObjectFromGUID("5ebc77")
+DoMakeYourselvesAtHome = getObjectFromGUID("812989")
+TheLonelyPerfectionOfMyDream = getObjectFromGUID("2531f1")
+--Movie 8
+ExpendableAssets = getObjectFromGUID("1dcfaa")
+FlaresFragsClaymores = getObjectFromGUID("ff2c04")
+GetToTheChoppa = getObjectFromGUID("07d8af")
+--movie 9
+WarZone = getObjectFromGUID("cc66e8")
+PersonalLittleWar = getObjectFromGUID("25a23d")
+OtherWorldLifeForm = getObjectFromGUID("6bef1e")
+
+Objectives1 = ({
+    SOS,
+    LastColony,
+    WhereAreTheBrothers,
+    Breakout,
+    StrangeBehavior,
+    Incubators,
+    RogueTransmission,
+    ExpendableAssets,
+    WarZone
+})
+
+Objectives2 = ({
+    NoOneCanHearYouScream,
+    MostlyComeAtNight,
+    BeastIsOutThere,
+    YoureAThing,
+    NewResidents,
+    ReleaseTheHounds,
+    DoMakeYourselvesAtHome,
+    FlaresFragsClaymores,
+    PersonalLittleWar
+})
+
+Objectives3 = ({
+    PerfectOrganism,
+    WhosLayingEggs,
+    NobodyCanStopIt,
+    ShellBreed,
+    RulerOfTheRoost,
+    FinalCreation,
+    TheLonelyPerfectionOfMyDream,
+    GetToTheChoppa,
+    OtherWorldLifeForm
+})
+
+Locations = ({
+    Nostromo,
+    HadleysHope,
+    Fury,
+    Auriga,
+    Aviary,
+    Echiona,
+    Planet4,
+    ValVerdeanJungle,
+    LosAngeles
+})
+
+Objectives = ({
+    Movie1Obj,
+    Movie2Obj,
+    Movie3Obj,
+    Movie4Obj,
+    Movie5Obj,
+    Movie6Obj,
+    Movie7Obj,
+    Movie8Obj,
+    Movie9Obj
+})
+        --AVATARS--
+--base game
+Medic = getObjectFromGUID("af7cc7")
+Priest = getObjectFromGUID("1c963a")
+Gunner = getObjectFromGUID("06363c")
+Technician = getObjectFromGUID("2f61b6")
+Commander = getObjectFromGUID("2a6ff9")
+Researcher = getObjectFromGUID("6103cf")
+Synthetic = getObjectFromGUID("bfc4de")
+Executive = getObjectFromGUID("10b1fe")
+Scout = getObjectFromGUID("745299")
+Mercenary = getObjectFromGUID("4aede5")
+--expansion
+Odysseus = getObjectFromGUID("7bdeea")
+Administrator = getObjectFromGUID("af8aac")
+AnimalHandler = getObjectFromGUID("b0e8bf")
+Aeneas = getObjectFromGUID("46f5e8")
+SecurityChief = getObjectFromGUID("272ed6")
+Zoologist = getObjectFromGUID("1ae246")
+Daedalus = getObjectFromGUID("1f3df2")
+Heracles = getObjectFromGUID("6373e9")
+Theseus = getObjectFromGUID("aa6904")
+Veterinarian = getObjectFromGUID("9e638a")
+--covenant
+Terraformist = getObjectFromGUID("7ada1d")
+Biologist = getObjectFromGUID("af2a9e")
+Navigator = getObjectFromGUID("1508de")
+Pilot = getObjectFromGUID("655508")
+CommunicationsOfficer = getObjectFromGUID("2e7fd7")
+--Predator
+Guerrilla = getObjectFromGUID("675fc3")
+Tracker = getObjectFromGUID("5e279b")
+Radioman = getObjectFromGUID("da2ae7")
+CIAAgent = getObjectFromGUID("fd3c40")
+Lieutenant = getObjectFromGUID("3a826c")
+--predator2
+Detective = getObjectFromGUID("c8e005")
+SwatOfficer = getObjectFromGUID("2ec9fc")
+OWLFAgent = getObjectFromGUID("a32b45")
+Reporter = getObjectFromGUID("718cf9")
+Gangster = getObjectFromGUID("6b048b")
+
+BaseGameAvatars = ({ --10
+    Medic,
+    Priest,
+    Gunner,
+    Technician,
+    Commander,
+    Researcher,
+    Synthetic,
+    Executive,
+    Scout,
+    Mercenary,
+})
+
+ExpansionAvatars = ({ --10
+    Odysseus,
+    Administrator,
+    AnimalHandler,
+    Aeneas,
+    SecurityChief,
+    Zoologist,
+    Daedalus,
+    Heracles,
+    Theseus,
+    Veterinarian
+})
+
+CovenantAvatars = ({ --5
+    Terraformist,
+    Biologist,
+    Navigator,
+    Pilot,
+    CommunicationsOfficer,
+})
+
+PredatorAvatars = ({ --5
+    Guerrilla,
+    Tracker,
+    Radioman,
+    CIAAgent,
+    Lieutenant
+})
+
+Predator2Avatars = ({ --5
+    Detective,
+    SwatOfficer,
+    OWLFAgent,
+    Reporter,
+    Gangster
+})
+
+        --BARRACKS--
+Dallas = getObjectFromGUID("410aba")
+Brett = getObjectFromGUID("d42558")
+Kane = getObjectFromGUID("1da384")
+Lambert = getObjectFromGUID("258fe5")
+WarrantOfficerRipley = getObjectFromGUID("4bab36")
+Parker = getObjectFromGUID("16e03e")
+LieutenantRipley = getObjectFromGUID("7ea499")
+Hudson = getObjectFromGUID("9e391f")
+Hicks = getObjectFromGUID("b2a269")
+Bishop = getObjectFromGUID("c98e52")
+Gorman = getObjectFromGUID("bf06b6")
+Drake = getObjectFromGUID("a288fc")
+Dillon = getObjectFromGUID("23d34b")
+Clemens = getObjectFromGUID("5fcd4b")
+Aaron = getObjectFromGUID("90816e")
+SisterRipley = getObjectFromGUID("896651")
+Morse = getObjectFromGUID("c517cb")
+Andrews = getObjectFromGUID("56eccf")
+EllenRipley = getObjectFromGUID("3206c4")
+RipleyNo8 = getObjectFromGUID("c1e175")
+Christie = getObjectFromGUID("71831a")
+Johner = getObjectFromGUID("604283")
+Vriess = getObjectFromGUID("7eb6a9")
+Elgyn = getObjectFromGUID("edf276")
+Call = getObjectFromGUID("1da053")
+Tennessee = getObjectFromGUID("9a07ac")
+Oram = getObjectFromGUID("6d1fc6")
+Lope = getObjectFromGUID("1247ca")
+Walter1 = getObjectFromGUID("16feb5")
+Daniels = getObjectFromGUID("22d8d8")
+Karine = getObjectFromGUID("9181c3")
+--predator
+Blain = getObjectFromGUID("0f18db")
+Dillon = getObjectFromGUID("8d1d44")
+Dutch = getObjectFromGUID("34f378")
+Mac = getObjectFromGUID("702c9a")
+--Predator 2
+Harrigan = getObjectFromGUID("0c1ed5")
+Danny = getObjectFromGUID("7cae9b")
+LambertPred = getObjectFromGUID("3f9313")
+Keyes = getObjectFromGUID("5cf8cd")
+
+Movie1Barracks = ({
+    WarrantOfficerRipley,
+    Parker,
+    Dallas,
+    Lambert
+})
+
+Movie2Barracks = ({
+    LieutenantRipley,
+    Hicks,
+    Hudson,
+    Bishop
+})
+
+Movie3Barracks = ({
+    SisterRipley,
+    Dillon,
+    Clemens,
+    Aaron
+})
+
+Movie4Barracks = ({
+    RipleyNo8,
+    Call,
+    Johner,
+    Christie
+})
+
+Movie7Barracks = ({
+    Daniels,
+    Oram,
+    Walter1,
+    Karine
+})
+
+Movie8Barracks = ({
+    --predator
+    Blain,
+    Dillon,
+    Dutch,
+    Mac,
+})
+
+Movie9Barracks = ({
+    Harrigan,
+    Danny,
+    LambertPred,
+    Keyes
+})
+
+BaseBarracks = ({
+    WarrantOfficerRipley,
+    Parker,
+    Dallas,
+    Lambert,
+    LieutenantRipley,
+    Hicks,
+    Hudson,
+    Bishop,
+    SisterRipley,
+    Dillon,
+    Clemens,
+    Aaron,
+    RipleyNo8,
+    Call,
+    Johner,
+    Christie
+})
+
+ExpansionBarracks = ({
+    Brett,
+    Kane,
+    Gorman,
+    Drake,
+    Morse,
+    Andrews,
+    EllenRipley,
+    Vriess,
+    Elgyn
+})
+
+CovenantBarracks = ({
+    Daniels,
+    Oram,
+    Walter1,
+    Karine,
+    Lope,
+    Tennessee
+})
+
+PredatorBarracks = ({
+    Blain,
+    Dillon,
+    Dutch,
+    Mac,
+    Harrigan,
+    Danny,
+    LambertPred,
+    Keyes
+})
+
+AllBarracks = ({
+    Dallas,
+    Brett,
+    Kane,
+    Lambert,
+    WarrantOfficerRipley,
+    Parker,
+    LieutenantRipley,
+    Hudson,
+    Hicks,
+    Bishop,
+    Gorman,
+    Drake,
+    Dillon,
+    Clemens,
+    Aaron,
+    SisterRipley,
+    Morse,
+    Andrews,
+    EllenRipley,
+    RipleyNo8,
+    Christie,
+    Johner,
+    Vriess,
+    Elgyn,
+    Call,
+    Tennessee,
+    Oram,
+    Lope,
+    Walter1,
+    Daniels,
+    Karine,
+    Blain,
+    Dillon,
+    Dutch,
+    Mac,
+    Harrigan,
+    Danny,
+    LambertPred,
+    Keyes
+})
+
+MovieBarracks = ({
+    Movie1Barracks,
+    Movie2Barracks,
+    Movie3Barracks,
+    Movie4Barracks,
+    AllBarracks,
+    AllBarracks,
+    Movie7Barracks,
+    Movie8Barracks,
+    Movie9Barracks,
+    CovenantBarracks,
+    AllBarracks
+})
+
+        --PLAYERS--
+--Red player
+RedArea = getObjectFromGUID("5ec6b4")
+RedPlayButton = getObjectFromGUID("e3f807")
+RedDrawPile = getObjectFromGUID("2ce358")
+RedDiscard = getObjectFromGUID("5a06b1")
+RedPlayZone = getObjectFromGUID("a33f75")
+RedHandZone = getObjectFromGUID("ee57c6")
+RedAvatarZone = getObjectFromGUID("26bb65")
+RedStrikeZone = getObjectFromGUID("d6c332")
+RedPredatorStarter = getObjectFromGUID("98ba83")
+RedAlienStarter = getObjectFromGUID("2ab6c4")
+RedPlayer = ({
+    avatarZone = RedAvatarZone,
+    drawZone = RedDrawPile,
+    handZone = RedHandZone,
+    discardZone = RedDiscard,
+    pcolor = "Red",
+    playZone = RedPlayZone,
+    strikeZone = RedStrikeZone})
+
+RedDiscard.createButton({
+    click_function = "RedPlayerDrawsSix",
+    function_owner = Global,
+    label          = "End Turn",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+    })
+RedAvatarZone.createButton({
+    click_function = "RedPlayerDrawsOne",
+    function_owner = Global,
+    label          = "Draw 1",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+    })
+RedDrawPile.createButton({
+    click_function = "RedPlayerPlaysHand",
+    function_owner = Global,
+    label          = "Play",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+--end Red player
+
+--Purple player
+PurpleArea = getObjectFromGUID("40d004")
+PurpleDrawPile = getObjectFromGUID("a8b7dd")
+PurpleDiscard = getObjectFromGUID("6e87d8")
+PurplePlayZone = getObjectFromGUID("2b989e")
+PurpleHandZone = getObjectFromGUID("e4fb0d")
+PurpleAvatarZone = getObjectFromGUID("6187f0")
+PurpleStrikeZone = getObjectFromGUID("dcd993")
+PurplePredatorStarter = getObjectFromGUID("3347ba")
+PurpleAlienStarter = getObjectFromGUID("870440")
+PurplePlayer = ({
+    avatarZone = PurpleAvatarZone,
+    drawZone = PurpleDrawPile,
+    handZone = PurpleHandZone,
+    discardZone = PurpleDiscard,
+    pcolor = "Purple",
+    playZone = PurplePlayZone,
+    strikeZone = PurpleStrikeZone})
+
+PurpleDiscard.createButton({
+    click_function = "PurplePlayerDrawsSix",
+    function_owner = Global,
+    label          = "End Turn",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+PurpleAvatarZone.createButton({
+    click_function = "PurplePlayerDrawsOne",
+    function_owner = Global,
+    label          = "Draw 1",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+PurpleDrawPile.createButton({
+    click_function = "PurplePlayerPlaysHand",
+    function_owner = Global,
+    label          = "Play",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+--end PurplePlayer
+
+--Green player
+GreenArea = getObjectFromGUID("2edc05")
+GreenDrawPile = getObjectFromGUID("d27b12")
+GreenDiscard = getObjectFromGUID("241c1c")
+GreenPlayZone = getObjectFromGUID("d9466e")
+GreenHandZone = getObjectFromGUID("17e829")
+GreenAvatarZone = getObjectFromGUID("6cf60f")
+GreenStrikeZone = getObjectFromGUID("b67b61")
+GreenPredatorStarter = getObjectFromGUID("3014dc")
+GreenAlienStarter = getObjectFromGUID("af0fc2")
+GreenPlayer = ({
+    avatarZone = GreenAvatarZone,
+    drawZone = GreenDrawPile,
+    handZone = GreenHandZone,
+    discardZone = GreenDiscard,
+    pcolor = "Green",
+    playZone = GreenPlayZone,
+    strikeZone = GreenStrikeZone})
+
+GreenDiscard.createButton({
+    click_function = "GreenPlayerDrawsSix",
+    function_owner = Global,
+    label          = "End Turn",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+GreenAvatarZone.createButton({
+    click_function = "GreenPlayerDrawsOne",
+    function_owner = Global,
+    label          = "Draw 1",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+GreenDrawPile.createButton({
+    click_function = "GreenPlayerPlaysHand",
+    function_owner = Global,
+    label          = "Play",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+--end Green player
+
+--White player
+WhiteArea = getObjectFromGUID("fa92b2")
+WhiteDrawPile = getObjectFromGUID("ccc6c0")
+WhiteDiscard = getObjectFromGUID("8efb45")
+WhitePlayZone = getObjectFromGUID("3b4b08")
+WhiteHandZone = getObjectFromGUID("187d26")
+WhiteAvatarZone = getObjectFromGUID("f037ce")
+WhiteStrikeZone = getObjectFromGUID("5c2695")
+WhitePredatorStarter = getObjectFromGUID("a38629")
+WhiteAlienStarter = getObjectFromGUID("a6b078")
+
+WhitePlayer = ({
+    avatarZone = WhiteAvatarZone,
+    drawZone = WhiteDrawPile,
+    handZone = WhiteHandZone,
+    discardZone = WhiteDiscard,
+    pcolor = "White",
+    playZone = WhitePlayZone,
+    strikeZone = WhiteStrikeZone})
+
+WhiteDiscard.createButton({
+    click_function = "WhitePlayerDrawsSix",
+    function_owner = Global,
+    label          = "End Turn",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+WhiteAvatarZone.createButton({
+    click_function = "WhitePlayerDrawsOne",
+    function_owner = Global,
+    label          = "Draw 1",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+WhiteDrawPile.createButton({
+    click_function = "WhitePlayerPlaysHand",
+    function_owner = Global,
+    label          = "Play",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+--end WhitePlayer
+
+--Blue player
+BlueArea = getObjectFromGUID("052c72")
+BlueDrawSix = getObjectFromGUID("5d2045")
+BlueDrawOne = getObjectFromGUID("ce7e23")
+BluePlayButton = getObjectFromGUID("09f052")
+BlueDrawPile = getObjectFromGUID("ea62e6")
+BlueDiscard = getObjectFromGUID("12faf9")
+BluePlayZone = getObjectFromGUID("9d096d")
+BlueHandZone = getObjectFromGUID("fe65d3")
+BlueAvatarZone = getObjectFromGUID("c3ca21")
+BlueStrikeZone = getObjectFromGUID("c81585")
+BluePredatorStarter = getObjectFromGUID("c0cbc8")
+BlueAlienStarter = getObjectFromGUID("17e6db")
+
+BluePlayer = ({
+    avatarZone = BlueAvatarZone,
+    drawZone = BlueDrawPile,
+    handZone = BlueHandZone,
+    discardZone = BlueDiscard,
+    pcolor = "Blue",
+    playZone = BluePlayZone,
+    strikeZone = BlueStrikeZone})
+
+BlueDiscard.createButton({
+    click_function = "BluePlayerDrawsSix",
+    function_owner = Global,
+    label          = "End Turn",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+BlueAvatarZone.createButton({
+    click_function = "BluePlayerDrawsOne",
+    function_owner = Global,
+    label          = "Draw 1",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+BlueDrawPile.createButton({
+    click_function = "BluePlayerPlaysHand",
+    function_owner = Global,
+    label          = "Play",
+    position       = {0, -.4, -.93},
+    rotation       = {0,180,0},
+    width          = 500,
+    height         = 100,
+    font_size      = 80,
+    color          = {0, 0, 0},
+    font_color     = {1, 1, 1},
+})
+--end Blue player
+
+end
+
+        --FUNCTIONS--
+function RedPlayerDrawsSix()
+    DrawSix(RedPlayer)
+end
+
+function RedPlayerDrawsOne()
+    local cardsFound = false
+    for i, v in pairs(RedPlayer.drawZone.getObjects()) do
+       if v.tag == 'Deck' or v.tag == 'Card' then
+           cardsFound = true
+       end
+    end
+    if (cardsFound == false) then
+     shuffleDiscard(RedPlayer)
+     delayedCallParam('drawSingleCard', 1, RedPlayer)
+    else
+     drawSingleCard(RedPlayer)
+    end
+end
+
+function RedPlayerPlaysHand()
+    PlayHand(RedPlayer)
+end
+
+function PurplePlayerDrawsSix()
+    DrawSix(PurplePlayer)
+end
+
+function PurplePlayerDrawsOne()
+    local cardsFound = false
+    for i, v in pairs(PurplePlayer.drawZone.getObjects()) do
+       if v.tag == 'Deck' or v.tag == 'Card' then
+           cardsFound = true
+       end
+    end
+    if (cardsFound == false) then
+     shuffleDiscard(PurplePlayer)
+     delayedCallParam('drawSingleCard', 1, PurplePlayer)
+    else
+     drawSingleCard(PurplePlayer)
+    end
+end
+
+function PurplePlayerPlaysHand()
+    PlayHand(PurplePlayer)
+end
+
+function GreenPlayerDrawsSix()
+    DrawSix(GreenPlayer)
+end
+
+function GreenPlayerDrawsOne()
+    local cardsFound = false
+    for i, v in pairs(GreenPlayer.drawZone.getObjects()) do
+       if v.tag == 'Deck' or v.tag == 'Card' then
+           cardsFound = true
+       end
+    end
+    if (cardsFound == false) then
+     shuffleDiscard(GreenPlayer)
+     delayedCallParam('drawSingleCard', 1, GreenPlayer)
+    else
+     drawSingleCard(GreenPlayer)
+    end
+end
+
+function GreenPlayerPlaysHand()
+    PlayHand(GreenPlayer)
+end
+
+function WhitePlayerDrawsSix()
+    DrawSix(WhitePlayer)
+end
+
+function WhitePlayerDrawsOne()
+    local cardsFound = false
+    for i, v in pairs(WhitePlayer.drawZone.getObjects()) do
+       if v.tag == 'Deck' or v.tag == 'Card' then
+           cardsFound = true
+       end
+    end
+    if (cardsFound == false) then
+     shuffleDiscard(WhitePlayer)
+     delayedCallParam('drawSingleCard', 1, WhitePlayer)
+    else
+     drawSingleCard(WhitePlayer)
+    end
+end
+
+function WhitePlayerPlaysHand()
+    PlayHand(WhitePlayer)
+end
+
+function BluePlayerDrawsSix()
+    DrawSix(BluePlayer)
+end
+
+function BluePlayerDrawsOne()
+    local cardsFound = false
+    for i, v in pairs(BluePlayer.drawZone.getObjects()) do
+       if v.tag == 'Deck' or v.tag == 'Card' then
+           cardsFound = true
+       end
+    end
+    if (cardsFound == false) then
+     shuffleDiscard(BluePlayer)
+     delayedCallParam('drawSingleCard', 1, BluePlayer)
+    else
+     drawSingleCard(BluePlayer)
+    end
+end
+
+function BluePlayerPlaysHand()
+    PlayHand(BluePlayer)
+end
+
+--Put all of players cards in hand into their play zone
+function PlayHand(player)
+    local cardsInHand
+    cardsInHand = 0
+    for i, v in pairs(player.handZone.getObjects()) do
+        if v.tag == 'Card' then
+          cardsInHand = cardsInHand + 1
+        end
+    end
+    if cardsInHand == 0 then
+      broadcastToAll("No cards to play!", {r=1, g=0, b=0})
+    else
+        local offsetX = -7.5
+        local offsetZ = 3
+        for i, v in pairs(player.handZone.getObjects()) do
+          if v.tag == 'Card' then
+            v.setPosition({player.playZone.getPosition().x + offsetX, player.playZone.getPosition().y, player.playZone.getPosition().z + offsetZ}, false, true)
+            offsetX = offsetX + 3
+            if (offsetX > 10) then
+              offsetX = -7.5
+              offsetZ = offsetZ - 4
+            end
+          end
+        end
+    end
+end
+
+--clean play area, draw six cards, shuffle discard if not enough cards in draw pile
+function DrawSix(player)
+    cleanPlayZone(player)
+    local cardsLeft
+    local cardRemainder
+    cardsLeft = 0
+    cardRemainder = 0
+    if player.drawZone.getObjects()[1] == nil then
+        cardsLeft = 0
+    elseif player.drawZone.getObjects()[1].getQuantity() == -1 then
+        cardsLeft = 1
+    else
+        cardsLeft = player.drawZone.getObjects()[1].getQuantity()
+    end
+
+    if cardsLeft > 6 then
+        cardsLeft = 6
+    else
+        cardRemainder = 6 - cardsLeft
+    end
+
+    for i=1, cardsLeft do
+        drawSingleCard(player)
+    end
+
+    if cardRemainder > 0 then
+        delayedCallParam('shuffleDiscard', 1, player)
+        for i=1, cardRemainder do
+            delayedCallParam('drawSingleCard', 2, player)
+        end
+    end
+end
+
+--draw a single card for a player
+function drawSingleCard(player)
+ for i, v in pairs(player.drawZone.getObjects()) do
+     if v.tag == 'Deck' then
+         player.drawZone.getObjects()[1].dealToColor(1,player.pcolor)
+     elseif v.tag == 'Card' then
+         player.drawZone.getObjects()[1].flip()
+         player.drawZone.getObjects()[1].setPositionSmooth(player.handZone.getPosition(), false, true)
+       end
+ end
+end
+
+--function to shuffle discard pile
+function shuffleDiscard(player)
+ if player.discardZone.getObjects()[1] == nil then
+     broadcastToAll("No more cards!", {r=1, g=0, b=0})
+ else
+ player.discardZone.getObjects()[1].flip()
+ player.discardZone.getObjects()[1].shuffle()
+ player.discardZone.getObjects()[1].setPositionSmooth(player.drawZone.getPosition(), false, true)
+ end
+end
+
+--creating timer with parameters (params)
+function delayedCallParam(funcName, delayTime, params)
+ local uniqueID = 'timer2'..numTimers
+ numTimers = numTimers + 1
+ Timer.create({
+     identifier = uniqueID,
+     function_name = funcName,
+     parameters = params,
+     delay = delayTime
+ })
+end
+
+--move all cards in a players play area to their discard
+function cleanPlayZone(player)
+    for i, v in pairs(player.playZone.getObjects()) do
+        if (v.tag == 'Card' or v.tag == 'Deck') then
+            v.setPositionSmooth(player.discardZone.getPosition(), false, true)
+        end
+    end
+end
+
+function SetupPlayer()
+
+end
+
+--Deal the randomly chosen avatar to a player
+function DealAvatar(player, number, avatars)
+    local avatar = avatars[number].getObjects()
+    local avatarSent = false
+    for i, v in pairs(avatar) do
+        if v.tag == 'Deck' then
+            local card = v.takeObject()
+            local count = 0
+            for j, k in pairs(v.getObjects()) do
+                count = j
+            end
+            card.setPositionSmooth(player.avatarZone.getPosition(), false, true)
+            avatarSent = true
+            card = v.takeObject()
+            card.flip()
+            card.setPositionSmooth(player.drawZone.getPosition(), false, true)
+            if count == 2 then
+                card = v.takeObject()
+                card.flip()
+                card.setPositionSmooth(player.drawZone.getPosition(), false, true)
+            end
+        end
+    end
+    Wait.frames(function() player.drawZone.getObjects()[1].shuffle() end, 250)
+    Wait.frames(function() DrawSix(player) end, 350)
+end
+
+--get the player given their color
+function GetPlayer(pColor)
+    if (pColor == "Red") then
+        return RedPlayer
+    elseif (pColor == "Purple") then
+        return PurplePlayer
+    elseif (pColor == "Green") then
+        return GreenPlayer
+    elseif (pColor == "White") then
+        return WhitePlayer
+    elseif (pColor == "Blue") then
+        return BluePlayer
+    end
+end
+
+function ToggleMovie1()
+    ToggleMovieButtons(1)
+    ToggleAlienSelected()
+end
+
+function ToggleMovie2()
+    ToggleMovieButtons(2)
+    ToggleAlienSelected()
+end
+
+function ToggleMovie3()
+    ToggleMovieButtons(3)
+    ToggleAlienSelected()
+end
+
+function ToggleMovie4()
+    ToggleMovieButtons(4)
+    ToggleAlienSelected()
+end
+
+function ToggleMovie5()
+    ToggleMovieButtons(5)
+    ToggleAlienSelected()
+end
+
+function ToggleMovie6()
+    ToggleMovieButtons(6)
+    ToggleAlienSelected()
+end
+
+function ToggleMovie7()
+    ToggleMovieButtons(7)
+    ToggleAlienSelected()
+end
+
+function ToggleMovie8()
+    ToggleMovieButtons(8)
+    TogglePredatorSelected()
+end
+
+function ToggleMovie9()
+    ToggleMovieButtons(9)
+    TogglePredatorSelected()
+end
+
+function ToggleMovieButtons(movieSelected)
+    for i, v in pairs(MovieSelected) do
+        if i == movieSelected then
+            if MovieSelected[i] == true then
+                MovieSelected[i] = false
+                UI.setAttribute(MovieButtons[i], "isOn", "false")
+            else
+                MovieSelected[i] = true
+                UI.setAttribute(MovieButtons[i], "isOn", "true")
+            end
+        else
+            MovieSelected[i] = false
+            UI.setAttribute(MovieButtons[i], "isOn", "false")
+        end
+    end
+end
+
+function ToggleAlienSelected()
+    AlienMovieSelected = true
+    BoardSelected = "Alien"
+end
+
+function TogglePredatorSelected()
+    AlienMovieSelected = false
+    BoardSelected = "Predator"
+end
+
+function ToggleExpansionDrones()
+    if ExpansionDronesSelected == true then
+        ExpansionDronesSelected = false
+    else
+        ExpansionDronesSelected = true
+    end
+end
+
+function ToggleRandomBarracks()
+    local Toggles = {
+        "ToggleButtonBaseGameBarracks",
+        "ToggleButtonExpansionBarracks",
+        "ToggleButtonCovenantBarracks",
+        "ToggleButtonPredatorBarracks"
+    }
+    if RandomBarracksSelected == true then
+        RandomBarracksSelected = false
+        for i, v in pairs(Toggles) do
+            UI.setAttribute(v, "interactable", "false")
+        end
+    else
+        RandomBarracksSelected = true
+        for i, v in pairs(Toggles) do
+            UI.setAttribute(v, "interactable", "true")
+        end
+    end
+end
+
+function ToggleBaseGameBarracks()
+    if BaseBarracksSelected == true then
+        BaseBarracksSelected = false
+    else
+        BaseBarracksSelected = true
+    end
+end
+
+function ToggleExpansionBarracks()
+    if ExpansionBarracksSelected == true then
+        ExpansionBarracksSelected = false
+    else
+        ExpansionBarracksSelected = true
+    end
+end
+
+function ToggleCovenantBarracks()
+    if CovenantBarracksSelected == true then
+        CovenantBarracksSelected = false
+    else
+        CovenantBarracksSelected = true
+    end
+end
+
+function TogglePredatorBarracks()
+    if PredatorBarracksSelected == true then
+        PredatorBarracksSelected = false
+    else
+        PredatorBarracksSelected = true
+    end
+end
+
+function ToggleRandomizeAvatars()
+    local Toggles = {
+        "ToggleButtonBaseAvatars",
+        "ToggleButtonExpAvatars",
+        "ToggleButtonCovAvatars",
+        "ToggleButtonPredAvatars",
+        "ToggleButtonPred2Avatars"
+    }
+    if RandomizeAvatarsSelected == true then
+        RandomizeAvatarsSelected = false
+        for i, v in pairs(Toggles) do
+            UI.setAttribute(v, "interactable", "false")
+        end
+    else
+        RandomizeAvatarsSelected = true
+        for i, v in pairs(Toggles) do
+            UI.setAttribute(v, "interactable", "true")
+        end
+    end
+end
+
+function ToggleBaseAvatars()
+    if BaseAvatarsSelected == true then
+        BaseAvatarsSelected = false
+    else
+        BaseAvatarsSelected = true
+    end
+end
+
+function ToggleExpAvatars()
+    if ExpansionAvatarsSelected == true then
+        ExpansionAvatarsSelected = false
+    else
+        ExpansionAvatarsSelected = true
+    end
+end
+
+function ToggleCovAvatars()
+    if CovenantAvatarsSelected == true then
+        CovenantAvatarsSelected = false
+    else
+        CovenantAvatarsSelected = true
+    end
+end
+
+function TogglePredatorAvatars()
+    if PredatorAvatarsSelected == true then
+        PredatorAvatarsSelected = false
+    else
+        PredatorAvatarsSelected = true
+    end
+end
+
+function TogglePredator2Avatars()
+    if Predator2AvatarsSelected == true then
+        Predator2AvatarsSelected = false
+    else
+        Predator2AvatarsSelected = true
+    end
+end
+
+function ToggleExpansionStrikes()
+    if ExpansionStrikesSelected == true then
+        ExpansionStrikesSelected = false
+    else
+        ExpansionStrikesSelected = true
+    end
+end
+
+function ToggleRemovePlayers()
+    if RemoveUnseatedPlayers == true then
+        RemoveUnseatedPlayers = false
+    else
+        RemoveUnseatedPlayers = true
+    end
+end
+
+function StartGame()
+    RemovePlayers()
+    closePanel()
+    SetupButtons()
+    if RandomizeAvatarsSelected == true then
+        SetupAvatars()
+    end
+
+    local movie = 0
+    local barracks
+    for i, v in pairs(MovieSelected) do
+        if v == true then
+            movie = i
+        end
+    end
+
+    --Deal predator or alien board
+    local boardsBag = BoardBag.getObjects()
+    for i, v in pairs(boardsBag[1].getObjects()) do
+        if v.name == BoardSelected then
+            local board = boardsBag[1].takeObject({guid = v.guid, position = BoardPosition, rotation = {0, 180, 0}})
+            board.setLock(true)
+            break
+        end
+    end
+
+    if RandomBarracksSelected == true then
+        barracks = BuildBarracksTable()
+        if #barracks < 2 then
+            barracks = MovieBarracks[movie]
+        end
+    else
+        barracks = MovieBarracks[movie]
+    end
+
+    if barracks ~= nil and #barracks > 4 then
+        barracks = RandomBarracks(barracks)
+    end
+
+    Wait.frames(function() SetupMovie(movie, barracks) end, 500)
+
+    local players = getSeatedPlayers()
+    math.randomseed(os.time())
+    local number = math.random(#getSeatedPlayers())
+    broadcastToAll(players[number] .. " goes first!", players[number])
+end
+
+function SetupMovie(mov, barracks)
+    local obj
+    if mov > 0 then
+        -- if Locations[mov].getObjects()[1].tag == 'Card' then
+        --     loc = Locations[mov].getObjects()[1]
+        -- else
+        --     loc = Locations[mov].getObjects()[2]
+        -- end
+        ChosenLocation = Locations[mov]
+        if Objectives[mov].getObjects()[1].tag == 'Deck' then
+            obj = Objectives[mov].getObjects()[1]
+        else
+            obj = Objectives[mov].getObjects()[2]
+        end
+        SetupHatchery(mov)
+        ChosenLocation.setPosition(Location.getPosition())
+        obj.setPosition(Objective.getPosition())
+    end
+
+    if barracks ~= nil then
+        SetupBarracks(barracks)
+    end
+
+    SetupSergeants()
+    SetupStrikes()
+
+    if (AlienMovieSelected == true) then
+        if HatcheryDeck.getObjects()[1].tag == 'Deck' then
+            HatcheryDeck.getObjects()[1].setPosition(Hatchery.getPosition())
+        else
+            HatcheryDeck.getObjects()[2].setPosition(Hatchery.getPosition())
+        end
+    end
+end
+
+function BuildBarracksTable()
+    local barracks = ({})
+    local count = 0
+    if BaseBarracksSelected == true then
+        count = count + #BaseBarracks
+        for i, v in ipairs(BaseBarracks) do
+            table.insert(barracks, v)
+        end
+    end
+    if ExpansionBarracksSelected == true then
+        count = count + #ExpansionBarracks
+        for i, v in ipairs(ExpansionBarracks) do
+            table.insert(barracks, v)
+        end
+    end
+    if CovenantBarracksSelected == true then
+        count = count + #CovenantBarracks
+        for i, v in ipairs(CovenantBarracks) do
+            table.insert(barracks, v)
+        end
+    end
+    if PredatorBarracksSelected == true then
+        count = count + #PredatorBarracks
+        for i, v in ipairs(PredatorBarracks) do
+            table.insert(barracks, v)
+        end
+    end
+    return barracks
+end
+
+function RandomBarracks(barracks)
+    math.randomseed(os.time())
+    local number
+    local alreadyChosen = ({0})
+    local taken = true
+    for i=1, 4 do
+        while (taken) do
+            number = math.random(#barracks)
+            local check = false
+            for j, k in pairs(alreadyChosen) do
+                if (k == number) then
+                    check = true
+                end
+            end
+            if (check == false) then
+                taken = false
+            end
+        end
+        taken = true
+        table.insert(alreadyChosen, 1, number)
+    end
+    local result = ({
+        barracks[alreadyChosen[1]],
+        barracks[alreadyChosen[2]],
+        barracks[alreadyChosen[3]],
+        barracks[alreadyChosen[4]]
+    })
+    return result
+end
+
+function SetupBarracks(barracks)
+    local bar
+    for i, v in pairs(barracks) do
+        if v.getObjects()[1].tag == 'Deck' then
+            bar = v.getObjects()[1]
+        else
+            bar = v.getObjects()[2]
+        end
+        bar.flip()
+        bar.setPosition(Barracks.getPosition())
+    end
+
+    Wait.frames(function()
+        for i, v in pairs(Barracks.getObjects()) do
+            if v.tag == 'Deck' then
+                bar = v
+            end
+        end
+        bar.shuffle()
+        bar.shuffle()
+    end , 350)
+
+    Wait.frames( function()
+        for i, v in pairs(TheHQ) do
+            local card = bar.takeObject()
+            card.setPosition(v.getPosition())
+            card.flip()
+        end
+    end, 425)
+end
+
+function SetupSergeants()
+    local serg
+    if BoardSelected == "Alien" then
+        serg = 1
+    else
+        serg = 2
+    end
+    local sergDeck
+    if Sergeants[serg].getObjects()[1].tag == 'Deck' then
+        sergDeck = Sergeants[serg].getObjects()[1]
+    else
+        sergDeck = Sergeants[serg].getObjects()[2]
+    end
+    Wait.frames(function() sergDeck.flip() end, 100)
+    Wait.frames(function() sergDeck.shuffle() end, 250)
+    sergDeck.setPosition(SergeantDeck.getPosition())
+end
+
+function SetupStrikes()
+    local strikes
+    if BoardSelected == "Alien" then
+        strikes = 1
+    else
+        strikes = 2
+    end
+    local strikeDeck = Strikes[strikes]
+
+    Wait.frames(function() strikeDeck.flip() end, 100)
+    Wait.frames(function() strikeDeck.shuffle() end, 250)
+    strikeDeck.setPosition(StrikesDeck.getPosition())
+    if ExpansionStrikesSelected == true then
+        local expStrikes
+        if ExpansionStrikes.getObjects()[1].tag == 'Deck' then
+            expStrikes = ExpansionStrikes.getObjects()[1]
+        else
+            expStrikes = ExpansionStrikes.getObjects()[2]
+        end
+        expStrikes.flip()
+        expStrikes.setPosition(StrikesDeck.getPosition())
+        Wait.frames( function()
+            for i, v in pairs(StrikesDeck.getObjects()) do
+                if v.tag == 'Deck' then
+                    v.shuffle()
+                end
+            end
+        end, 100)
+    end
+end
+
+function SetupHatchery(mov)
+    local hatch1, hatch2, hatch3
+
+    if Objectives1[mov].getObjects()[1].tag == 'Deck' then
+        hatch1 = Objectives1[mov].getObjects()[1]
+    else
+        hatch1 = Objectives1[mov].getObjects()[2]
+    end
+    if Objectives2[mov].getObjects()[1].tag == 'Deck' then
+        hatch2 = Objectives2[mov].getObjects()[1]
+    else
+        hatch2 = Objectives2[mov].getObjects()[2]
+    end
+    if Objectives3[mov].getObjects()[1].tag == 'Deck' then
+        hatch3 = Objectives3[mov].getObjects()[1]
+    else
+        hatch3 = Objectives3[mov].getObjects()[2]
+    end
+    hatch3.flip()
+    hatch2.flip()
+    hatch1.flip()
+
+    local baseDrones
+    local drone
+    if AlienMovieSelected == true then
+        drone = Drones[1]
+    else
+        drone = Drones[2]
+    end
+    if drone.getObjects()[1].tag == 'Deck' then
+        baseDrones = drone.getObjects()[1]
+    else
+        baseDrones = drone.getObjects()[2]
+    end
+    baseDrones.flip()
+
+    if ExpansionDronesSelected == true and AlienMovieSelected == true then
+        local expDrones
+        if DroneDeckExp.getObjects()[1].tag == 'Deck' then
+            expDrones = DroneDeckExp.getObjects()[1]
+        else
+            expDrones = DroneDeckExp.getObjects()[2]
+        end
+        expDrones.flip()
+        expDrones.setPosition(baseDrones.getPosition())
+    end
+
+
+    playerCount = #getSeatedPlayers()
+
+    Wait.frames(function()
+        baseDrones.shuffle()
+        for i = 1, DroneDeckAmounts[playerCount][3] do
+            local card = baseDrones.takeObject()
+            card.setPosition(hatch3.getPosition())
+        end
+    end, 450)
+    Wait.frames(function() hatch3.shuffle() end, 550)
+    Wait.frames(function() hatch3.setPosition(Hive.getPosition()) end, 600)
+
+    Wait.frames(function()
+        for i = 1, DroneDeckAmounts[playerCount][2] do
+            local card = baseDrones.takeObject()
+            card.setPosition(hatch2.getPosition())
+        end
+    end, 650)
+    Wait.frames(function() hatch2.shuffle() end, 700)
+    Wait.frames(function() hatch2.setPosition(Hive.getPosition()) end, 750)
+
+    Wait.frames(function()
+        for i = 1, DroneDeckAmounts[playerCount][1] do
+            local card = baseDrones.takeObject()
+            card.setPosition(hatch1.getPosition())
+        end
+    end, 800)
+    Wait.frames(function() hatch1.shuffle() end, 850)
+    Wait.frames(function() hatch1.setPosition(Hive.getPosition()) end, 900)
+end
+
+function SetupAvatars()
+    local count = 0
+    local avatars = ({0})
+    if BaseAvatarsSelected == true then
+        count = count + #BaseGameAvatars
+        for i, v in ipairs(BaseGameAvatars) do
+            table.insert(avatars, v)
+        end
+    end
+    if ExpansionAvatarsSelected == true then
+        count = count + #ExpansionAvatars
+        for i, v in ipairs(ExpansionAvatars) do
+            table.insert(avatars, v)
+        end
+    end
+    if CovenantAvatarsSelected == true then
+        count = count + #CovenantAvatars
+        for i, v in ipairs(CovenantAvatars) do
+            table.insert(avatars, v)
+        end
+    end
+    if PredatorAvatarsSelected == true then
+        count = count + #PredatorAvatars
+        for i, v in ipairs(PredatorAvatars) do
+            table.insert(avatars, v)
+        end
+    end
+    if Predator2AvatarsSelected == true then
+        count = count + #Predator2Avatars
+        for i, v in ipairs(Predator2Avatars) do
+            table.insert(avatars, v)
+        end
+    end
+
+    local players = getSeatedPlayers()
+    local alreadyChosen = ({})
+    local taken = true
+    for i, v in pairs(players) do
+        math.randomseed(os.time())
+        local number
+        while (taken) do
+            number = math.random(count)
+            local check = false
+            for j, k in pairs(alreadyChosen) do
+                if (k == number) then
+                    check = true
+                end
+            end
+            if (check == false) then
+                taken = false
+            end
+        end
+        taken = true
+        table.insert(alreadyChosen, 1, number)
+        DealAvatar(GetPlayer(v), number, avatars)
+    end
+end
+
+function RemovePlayers()
+    local players = getSeatedPlayers()
+    local possiblePlayers = ({
+        "Red",
+        "White",
+        "Green",
+        "Purple",
+        "Blue"
+    })
+
+    for _,v in pairs(possiblePlayers) do
+        if v == "Red" then
+            if BoardSelected == "Alien" then
+                RedAlienStarter.flip()
+                RedAlienStarter.setPosition(RedDrawPile.getPosition())
+            else
+                RedPredatorStarter.flip()
+                RedPredatorStarter.setPosition(RedDrawPile.getPosition())
+            end
+        end
+        if v == "Purple" then
+            if BoardSelected == "Alien" then
+                PurpleAlienStarter.flip()
+                PurpleAlienStarter.setPosition(PurpleDrawPile.getPosition())
+            else
+                PurplePredatorStarter.flip()
+                PurplePredatorStarter.setPosition(PurpleDrawPile.getPosition())
+            end
+        end
+        if v == "Green" then
+            if BoardSelected == "Alien" then
+                GreenAlienStarter.flip()
+                GreenAlienStarter.setPosition(GreenDrawPile.getPosition())
+            else
+                GreenPredatorStarter.flip()
+                GreenPredatorStarter.setPosition(GreenDrawPile.getPosition())
+            end
+        end
+        if v == "White" then
+            if BoardSelected == "Alien" then
+                WhiteAlienStarter.flip()
+                WhiteAlienStarter.setPosition(WhiteDrawPile.getPosition())
+            else
+                WhitePredatorStarter.flip()
+                WhitePredatorStarter.setPosition(WhiteDrawPile.getPosition())
+            end
+        end
+        if v == "Blue" then
+            if BoardSelected == "Alien" then
+                BlueAlienStarter.flip()
+                BlueAlienStarter.setPosition(BlueDrawPile.getPosition())
+            else
+                BluePredatorStarter.flip()
+                BluePredatorStarter.setPosition(BlueDrawPile.getPosition())
+            end
+        end
+    end
+    Wait.frames(function()
+        if RemoveUnseatedPlayers == true then
+            for i, v in pairs(players) do
+                for j, k in pairs(possiblePlayers) do
+                    if k == v then
+                        table.remove(possiblePlayers, j)
+                    end
+                end
+            end
+            for i, v in pairs(possiblePlayers) do
+                if v == "Red" then
+                    RemoveRedPlayer()
+                end
+                if v == "Purple" then
+                    RemovePurplePlayer()
+                end
+                if v == "Green" then
+                    RemoveGreenPlayer()
+                end
+                if v == "White" then
+                    RemoveWhitePlayer()
+                end
+                if v == "Blue" then
+                    RemoveBluePlayer()
+                end
+            end
+        end
+    end, 50)
+end
+
+function RemoveRedPlayer()
+    for i, v in pairs(RedArea.getObjects()) do
+        v.destruct()
+    end
+    RedDiscard.removeButton(0)
+    RedAvatarZone.removeButton(0)
+    RedDrawPile.removeButton(0)
+end
+
+function RemovePurplePlayer()
+    for i, v in pairs(PurpleArea.getObjects()) do
+        v.destruct()
+    end
+    PurpleDiscard.removeButton(0)
+    PurpleAvatarZone.removeButton(0)
+    PurpleDrawPile.removeButton(0)
+end
+
+function RemoveGreenPlayer()
+    for i, v in pairs(GreenArea.getObjects()) do
+        v.destruct()
+    end
+    GreenDiscard.removeButton(0)
+    GreenAvatarZone.removeButton(0)
+    GreenDrawPile.removeButton(0)
+end
+
+function RemoveWhitePlayer()
+    for i, v in pairs(WhiteArea.getObjects()) do
+        v.destruct()
+    end
+    WhiteDiscard.removeButton(0)
+    WhiteAvatarZone.removeButton(0)
+    WhiteDrawPile.removeButton(0)
+end
+
+function RemoveBluePlayer()
+    for i, v in pairs(BlueArea.getObjects()) do
+        v.destruct()
+    end
+    BlueDiscard.removeButton(0)
+    BlueAvatarZone.removeButton(0)
+    BlueDrawPile.removeButton(0)
+end
+
+function BuyHQ1(obj, playerColor, click)
+    BuyFromHQ(GetPlayer(playerColor), HQ1)
+end
+function BuyHQ2(obj, playerColor, click)
+    BuyFromHQ(GetPlayer(playerColor), HQ2)
+end
+function BuyHQ3(obj, playerColor, click)
+    BuyFromHQ(GetPlayer(playerColor), HQ3)
+end
+function BuyHQ4(obj, playerColor, click)
+    BuyFromHQ(GetPlayer(playerColor), HQ4)
+end
+function BuyHQ5(obj, playerColor, click)
+    BuyFromHQ(GetPlayer(playerColor), HQ5)
+end
+
+function BuyFromHQ(player, hq)
+    local barracksDeck
+    local cardBeingBought
+    for i, v in pairs(hq.getObjects()) do
+        if (v.tag == 'Card') then
+            v.setPositionSmooth(player.discardZone.getPosition(), false, true)
+        end
+    end
+    Wait.frames(function()
+        for i, v in pairs(Barracks.getObjects()) do
+            if v.tag == 'Card' then
+                v.setPosition(hq.getPosition())
+                v.flip()
+            elseif v.tag == 'Deck' then
+                local card = v.takeObject()
+                card.setPosition(hq.getPosition())
+                card.flip()
+            end
+        end
+    end, 100)
+end
+
+function BuySergeant(obj, playerColor, click)
+    local player = GetPlayer(playerColor)
+    for i, v in pairs(SergeantDeck.getObjects()) do
+        if v.tag == 'Deck' then
+            local card = v.takeObject()
+            card.flip()
+            card.setPositionSmooth(player.discardZone.getPosition(), false, false)
+        elseif v.tag == 'Card' then
+            v.flip()
+            v.setPositionSmooth(player.discardZone.getPosition(), false, false)
+            SergeantDeck.removeButton(0)
+        end
+    end
+end
+
+function CompleteObjective()
+    for i, v in pairs(Objective.getObjects()) do
+        if v.tag == 'Card' then
+            v.setPosition(DiscardedHazards.getPosition())
+            Objective.removeButton(0)
+            broadcastToAll("YOU WON! CONGRATULATIONS!", {r=1, g=1, b=1})
+            Celebrate()
+        elseif v.tag == 'Deck' then
+            v.takeObject().setPosition(DiscardedHazards.getPosition())
+        end
+    end
+    broadcastToAll("OBJECTIVE COMPLETE!", {r=1, g=1, b=1})
+end
+
+function ScanComplex1()
+    ScanComplex(1)
+end
+
+function ScanComplex2()
+    ScanComplex(2)
+end
+
+function ScanComplex3()
+    ScanComplex(3)
+end
+
+function ScanComplex4()
+    ScanComplex(4)
+end
+
+function ScanComplex5()
+    ScanComplex(5)
+end
+
+function ScanComplex(comp)
+    local card = nil
+    for i, v in pairs(Complexes[comp].getObjects()) do
+        if v.tag == 'Card' then
+            v.flip()
+            card = v
+        elseif v.tag == 'Deck' then
+            v.flip()
+            card = v
+        end
+    end
+    Wait.frames(function()
+        if card ~= nil then
+            if card.getDescription() ~= '' then
+                CheckCard(card)
+            end
+        end
+    end, 200)
+end
+
+function CheckCard(card)
+    CheckObjectives(card)
+    if card.getDescription() == "Hazard" then
+        CheckHazards(card)
+    end
+end
+
+function CheckObjectives(card)
+    local description = card.getDescription()
+    if description == "SOS" then
+        if SOSPartFound == false then
+            SOSPartFound = true
+            Wait.frames(function()
+                card.setPosition(Operations1.getPosition())
+            end, 100)
+            broadcastToAll("Found a part of the S.O.S.! One more part to find.", {r=1, g=1, b=1})
+        else
+            for i, v in pairs(Operations1.getObjects()) do
+                if v.tag == 'Card' then
+                    if v.getDescription() == "SOS" then
+                        v.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
+                        break
+                    end
+                end
+            end
+            for i, v in pairs(Operations2.getObjects()) do
+                if v.tag == 'Card' then
+                    if v.getDescription() == "SOS" then
+                        v.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
+                        break
+                    end
+                end
+            end
+            Wait.frames(function()
+                card.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
+             end, 100)
+            broadcastToAll("Found a second part of the S.O.S.!", {r=1, g=1, b=1})
+            Wait.frames(function()
+                CompleteObjective()
+            end, 100)
+        end
+    end
+end
+
+function CheckHazards(card)
+    HazardCount = HazardCount + 1
+    local throwAwayHazard = true
+    local index = 0
+    for i, v in pairs(Locations) do
+        if ChosenLocation == v then
+            index = i
+        end
+    end
+    if index == 1 then
+        if HazardCount == 1 then
+            broadcastToAll("First Hazard found, adding two cards to The Complex", {0.129, 0.694, 0.607})
+            Wait.frames(function()
+                PushComplex(5)
+            end, 200)
+            Wait.frames(function()
+                PushComplex(5)
+            end, 600)
+        elseif HazardCount == 2 then
+            local topCard = nil
+            for i, v in pairs(Hive.getObjects()) do
+                if v.type == 'Deck' then
+                    topCard = v.takeObject()
+                elseif v.type == 'Card' then
+                    topCard = v
+                end
+            end
+            if topCard ~= nil then
+                topCard.flip()
+                Wait.frames(function()
+                    RotateCombatZone(topCard)
+                end, 100)
+            end
+            broadcastToAll("Second Hazard found, adding top card of the hive to Combat Zone", {0.129, 0.694, 0.607})
+        elseif HazardCount >= 3 then
+            throwAwayHazard = false
+            broadcastToAll("Third Hazard found, pay 8 to disarm self-destruct before reaching Combat Zone", {0.129, 0.694, 0.607})
+        end
+    end
+
+    if throwAwayHazard == true then
+        Wait.frames(function()
+            card.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
+         end, 100)
+     end
+end
+
+function GainStrike(obj, playerColor, click)
+    local player = GetPlayer(playerColor)
+    for i, v in pairs(StrikesDeck.getObjects()) do
+        if v.tag == 'Deck' then
+            local card = v.takeObject()
+            card.flip()
+            card.setPositionSmooth(player.strikeZone.getPosition(), false, false)
+        elseif v.tag == 'Card' then
+            v.flip()
+            v.setPositionSmooth(player.strikeZone.getPosition(), false, false)
+        end
+    end
+    --PushComplex(5)
+end
+
+function PushComplexButton()
+    PushComplex(5)
+end
+
+function PushComplex(index)
+    local found = false
+    local loc = nil
+    local emptyIndex
+    for i = 0, index do
+        if index - i == 0 then
+            break
+        end
+        for j, v in pairs(Complexes[index - i].getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                found = true
+            end
+        end
+        if found == false then
+            emptyIndex = index - i
+            loc = Complexes[emptyIndex]
+            break
+        end
+        found = false
+    end
+    if emptyIndex == index then
+        PushFinalize(index)
+        return
+    end
+
+    if loc == nil then
+        for i, v in pairs(Complex1.getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                v.flip()
+                RotateCombatZone(v)
+            end
+        end
+        emptyIndex = 1
+    end
+
+    for i = 1, index - emptyIndex do
+        for j, v in pairs(Complexes[emptyIndex + i].getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                v.setPosition(Complexes[(emptyIndex + i) - 1].getPosition())
+            end
+        end
+    end
+    PushFinalize(index)
+end
+
+-- function PushComplex(index)
+--     local isPushingCard = false
+--     local cardPushes
+--
+--     if index == 1 then -- base case
+--         for i, v in pairs(Complexes[index].getObjects()) do
+--             if v.getDescription() == "Egg" and v.getRotation().z == 0 then
+--                 goto continue
+--             end
+--             if v.tag == 'Card' then
+--                 if v.getRotation().z > 100 then
+--                     v.flip()
+--                     if v.getDescription() ~= '' then
+--                         CheckCard(v)
+--                     end
+--                 end
+--                 RotateCombatZone(v)
+--             elseif v.tag == 'Deck' then
+--                 RotateCombatZone(v)
+--                 if v.getRotation().z == 180 then
+--                     v.flip()
+--                     if v.getDescription() ~= '' then
+--                         CheckCard(v)
+--                     end
+--                 end
+--             end
+--             ::continue::
+--         end
+--         return
+--     end
+--
+--     for i, v in pairs(Complexes[index].getObjects()) do
+--         if v.tag == 'Card' then
+--             isPushingCard = true
+--             cardPushes = v
+--         elseif v.tag == 'Deck' then
+--             isPushingCard = true
+--             cardPushes = v
+--         end
+--     end
+--
+--     if isPushingCard == false then
+--         if index == 5 then
+--             PushFinalize(index)
+--         end
+--         return
+--     end
+--
+--         PushComplex(index - 1)
+--
+--
+--
+--     local complex = PushSingleCard(index)
+--     if complex == nil then
+--         RotateCombatZone(cardPushes)
+--     else
+--         cardPushes.setPosition(complex.getPosition())
+--     end
+--
+--     if index == 5 then
+--         --Wait.frames(function()
+--             PushFinalize(index)
+--         --end, 150)
+--     end
+--
+-- end
+
+function PushSingleCard(index)
+    local found = false
+    for i = 1, index do
+        if index - i == 0 then
+            return nil
+        end
+        for j, v in pairs(Complexes[index - i].getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                found = true
+            end
+        end
+        if found == false then
+            return Complexes[index - i]
+        end
+        found = false
+    end
+end
+
+-- function PushSingleCard(card, index)
+--     local empty = true
+--     for i=1, index do
+--         if index - i == 1 then
+--             RotateCombatZone(card)
+--             return
+--         end
+--         for j, v in pairs(Complexes[index - i].getObjects()) do
+--             if v.type == 'Card' or v.type == 'Deck' then
+--                 empty = false
+--             end
+--         end
+--         if empty == true then
+--             card.setPositionSmooth(Complexes[index - i].getPosition(), false, false)
+--             return
+--         end
+--     end
+-- end
+
+function PushFinalize(index)
+    local hiveFound = false
+    for i, v in pairs(Hive.getObjects()) do
+        if v.tag == 'Card' then
+            v.setPosition(Complexes[index].getPosition())
+            hiveFound = true
+        elseif v.tag == 'Deck' then
+            local card = v.takeObject()
+            card.setPosition(Complexes[index].getPosition())
+            hiveFound = true
+        end
+    end
+
+    if hiveFound == false then
+        if HiveDeckRanOut == true then
+            broadcastToAll("GAME OVER MAN", {r=1, g=0, b=0})
+        else
+            HiveDeckRanOut = true
+            for i, v in pairs(DeadEnemies.getObjects()) do
+                if v.tag == 'Deck' then
+                    v.flip()
+                    v.setPosition(Hive.getPosition())
+                elseif v.tag == 'Card' then
+                    v.flip()
+                    v.setPosition(Hive.getPosition())
+                end
+            end
+            Wait.frames(function() PushFinalize(index) end, 50)
+        end
+    end
+end
+
+function RotateCombatZone(card)
+    local found = false
+
+    local nostromo = false
+    for i, v in pairs(Locations) do
+        if v == ChosenLocation and i == 1 then
+            nostromo = true
+        end
+    end
+    if card.getDescription() == "Hazard" and nostromo == true and HazardCount == 3 then
+        for i, v in pairs(getSeatedPlayers()) do
+            GainStrike(nil, v, nil)
+            GainStrike(nil, v, nil)
+            GainStrike(nil, v, nil)
+        end
+        card.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
+        broadcastToAll("Third Hazard reached Combat Zone, all players recieve 3 strikes!", {0.129, 0.694, 0.607})
+    end
+
+    for i, v in pairs(CombatZone1.getObjects()) do
+        if v.type == 'Card' then
+            found = true
+        elseif v.type == 'Deck' then
+            found = true
+        end
+    end
+    if found == false then
+        card.setPositionSmooth(CombatZone1.getPosition(), false, false)
+        return
+    end
+    found = false
+    for i, v in pairs(CombatZone2.getObjects()) do
+        if v.type == 'Card' then
+            found = true
+        elseif v.type == 'Deck' then
+            found = true
+        end
+    end
+    if found == false then
+        card.setPositionSmooth(CombatZone2.getPosition(), false, false)
+        return
+    end
+    found = false
+    for i, v in pairs(CombatZone3.getObjects()) do
+        if v.type == 'Card' then
+            found = true
+        elseif v.type == 'Deck' then
+            found = true
+        end
+    end
+    if found == false then
+        card.setPositionSmooth(CombatZone3.getPosition(), false, false)
+        return
+    else
+        card.setPositionSmooth(CombatZone1.getPosition(), false, false)
+    end
+end
+
+function Celebrate()
+    local everything = getAllObjects()
+    local count = 0
+    local force
+    local torque
+    local replay = 0
+    math.randomseed(os.time())
+    while replay < 10 do
+
+        for i, v in pairs(everything) do
+            force = math.random(3000)
+            torque = math.random(3000)
+            if v.tag == 'Deck' or v.tag=='Card' then
+                Wait.frames(function()
+                    v.addForce({0, force, 0}, 3)
+                    v.addTorque({0, torque, 0}, 4)
+                end, count)
+                count = count + 10
+            end
+        end
+        replay = replay + 1
+
+    end
+end
+
+function closePanel()
+  UI.setAttribute("SetupPanel", "active", "false")
+end
+
+function SetupButtons()
+    if BoardSelected == "Predator" then
+        Objective.setPosition({-20.12, 2, 9.68})
+        Hive.setPosition({6.19, 2, 9.58})
+        StrikesDeck.setPosition({6.22, 2, 2.98})
+        DiscardedHazards.setPosition({19.76, 2, 3.32})
+        Location.setPosition({-19.49, 2, 3.3})
+        SergeantDeck.setPosition({-20.28, 2, -3.97})
+        HQ1.setPosition({-15.6, 2, -4.04})
+        HQ2.setPosition({-11.3, 2, -4.04})
+        HQ3.setPosition({-7, 2, -4.04})
+        HQ4.setPosition({-2.7, 2, -4.04})
+        HQ5.setPosition({1.6, 2, -4.04})
+        Barracks.setPosition({6.19,2,-3.66})
+        Complex1.setPosition({-15.73, 2, 9.55})
+        Complex2.setPosition({-11.53, 2, 9.55})
+        Complex3.setPosition({-7.26, 2, 9.55})
+        Complex4.setPosition({-3.11, 2, 9.55})
+        Complex5.setPosition({1.52, 2, 9.55})
+        CombatZone1.setPosition({-14.6, 2, 3.16})
+        CombatZone2.setPosition({-11.06, 2, 3.16})
+        CombatZone3.setPosition({-7.42, 2, 3.16})
+        DeadEnemies.setPosition({15.32, 2, 9.66})
+        DeadEnemies.setScale({12, 2, 4.6})
+    end
+
+    Hive.createButton({
+        click_function = "PushComplexButton",
+        function_owner = Global,
+        label          = "Advance",
+        position       = {0, -.4, -.62},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+
+    Complex1.createButton({
+        click_function = "ScanComplex1",
+        function_owner = Global,
+        label          = "Scan 2",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+
+    Complex2.createButton({
+        click_function = "ScanComplex2",
+        function_owner = Global,
+        label          = "Scan 2",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+
+    Complex3.createButton({
+        click_function = "ScanComplex3",
+        function_owner = Global,
+        label          = "Scan 3",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+
+    Complex4.createButton({
+        click_function = "ScanComplex4",
+        function_owner = Global,
+        label          = "Scan 3",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+
+    Complex5.createButton({
+        click_function = "ScanComplex5",
+        function_owner = Global,
+        label          = "Scan 4",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+
+    HQ1.createButton({
+        click_function = "BuyHQ1",
+        function_owner = Global,
+        label          = "Buy",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    HQ2.createButton({
+        click_function = "BuyHQ2",
+        function_owner = Global,
+        label          = "Buy",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    HQ3.createButton({
+        click_function = "BuyHQ3",
+        function_owner = Global,
+        label          = "Buy",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    HQ4.createButton({
+        click_function = "BuyHQ4",
+        function_owner = Global,
+        label          = "Buy",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    HQ5.createButton({
+        click_function = "BuyHQ5",
+        function_owner = Global,
+        label          = "Buy",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    SergeantDeck.createButton({
+        click_function = "BuySergeant",
+        function_owner = Global,
+        label          = "Buy",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    Objective.createButton({
+        click_function = "CompleteObjective",
+        function_owner = Global,
+        label          = "Complete",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    StrikesDeck.createButton({
+        click_function = "GainStrike",
+        function_owner = Global,
+        label          = "Gain Strike",
+        position       = {0, -.4, -.7},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+end
+
+--[[ The Update function. This is called once per frame. --]]
+function update ()
+--[[ print('Update loop!') --]]
+end
