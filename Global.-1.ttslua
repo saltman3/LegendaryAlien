@@ -954,6 +954,8 @@ function RedPlayerDrawsSix()
     if GetCurrentPlayer() == "Red" then
         DrawSix(RedPlayer)
         EndTurn()
+    else
+        broadcastToColor("Not your turn to end.", "Red", {0.856, 0.1, 0.094})
     end
 end
 
@@ -980,6 +982,8 @@ function PurplePlayerDrawsSix()
     if GetCurrentPlayer() == "Purple" then
         DrawSix(PurplePlayer)
         EndTurn("Purple")
+    else
+        broadcastToColor("Not your turn to end.", "Purple", {0.627, 0.125, 0.941})
     end
 end
 
@@ -1006,6 +1010,8 @@ function GreenPlayerDrawsSix()
     if CurrentPlayer() == "Green" then
         DrawSix(GreenPlayer)
         EndTurn()
+    else
+        broadcastToColor("Not your turn to end.", "Green", {0.192, 0.701, 0.168})
     end
 end
 
@@ -1032,6 +1038,8 @@ function WhitePlayerDrawsSix()
     if GetCurrentPlayer() == "White" then
         DrawSix(WhitePlayer)
         EndTurn()
+    else
+        broadcastToColor("Not your turn to end.", "White", {1, 1, 1})
     end
 end
 
@@ -1058,6 +1066,8 @@ function BluePlayerDrawsSix()
     if GetCurrentPlayer() == "Blue" then
         DrawSix(BluePlayer)
         EndTurn()
+    else
+        broadcastToColor("Not your turn to end.", "Blue", {0.118, 0.53, 1})
     end
 end
 
