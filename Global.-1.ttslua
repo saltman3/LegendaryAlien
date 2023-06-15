@@ -1,6 +1,5 @@
 function onload()
 numTimers = 0
-
 --PLAY AREA--
 StrikesDeck = getObjectFromGUID("963384")
 SergeantDeck = getObjectFromGUID("5213e6")
@@ -17,6 +16,7 @@ DiscardedHazards = getObjectFromGUID("ae65de")
 DeadEnemies = getObjectFromGUID("72db01")
 Hatchery = getObjectFromGUID("81b2be")
 BoardBag = getObjectFromGUID("aeb95f")
+DeadCharacters = getObjectFromGUID("d50720")
 
 BoardPosition = { -1.79, 1.07, 2.9 }
 
@@ -51,6 +51,11 @@ Complex2 = getObjectFromGUID("828d27")
 Complex3 = getObjectFromGUID("ac3d6a")
 Complex4 = getObjectFromGUID("32a1f3")
 Complex5 = getObjectFromGUID("80c84d")
+ComplexTop1 = getObjectFromGUID("c5a0b7")
+ComplexTop2 = getObjectFromGUID("cce70b")
+ComplexTop3 = getObjectFromGUID("9f1a5f")
+ComplexTop4 = getObjectFromGUID("888791")
+ComplexTop5 = getObjectFromGUID("07a848")
 CombatZone1 = getObjectFromGUID("4ce3a0")
 CombatZone2 = getObjectFromGUID("952cbe")
 CombatZone3 = getObjectFromGUID("1816a5")
@@ -75,6 +80,9 @@ AlienMovieSelected = false
 RemoveUnseatedPlayers = true
 BoardSelected = "Alien"
 HiveDeckRanOut = false
+Players = ({})
+CurrentTurn = 0
+ComplexSize = 5
 
 SOSPartFound = false
 HazardCount = 0
@@ -139,6 +147,36 @@ Complexes = ({
     Complex3,
     Complex4,
     Complex5
+})
+
+ComplexesTop = ({
+    ComplexTop1,
+    ComplexTop2,
+    ComplexTop3,
+    ComplexTop4,
+    ComplexTop5
+})
+
+CombatZones = ({
+    CombatZone1,
+    CombatZone2,
+    CombatZone3
+})
+
+PlayZones = ({
+    Complex1,
+    Complex2,
+    Complex3,
+    Complex4,
+    Complex5,
+    ComplexTop1,
+    ComplexTop2,
+    ComplexTop3,
+    ComplexTop4,
+    ComplexTop5,
+    CombatZone1,
+    CombatZone2,
+    CombatZone3
 })
         --NON INTERACTABLE OBJECTS--
 RedPlayBoard = getObjectFromGUID("66fd64")
@@ -228,8 +266,11 @@ Movie8Obj = getObjectFromGUID("60e9f5")
 Movie9Obj = getObjectFromGUID("db906f")
 --movie 1
 SOS = getObjectFromGUID("27b322")
+SOSCard = "320c38"
 NoOneCanHearYouScream = getObjectFromGUID("49b42d")
+NoOneCanHearYouScreamCard = "5c00c3"
 PerfectOrganism = getObjectFromGUID("dff99f")
+PerfectOrganismCard = "9c164c"
 --movie 2
 LastColony = getObjectFromGUID("018b01")
 MostlyComeAtNight = getObjectFromGUID("508bb8")
@@ -910,7 +951,10 @@ end
 
         --FUNCTIONS--
 function RedPlayerDrawsSix()
-    DrawSix(RedPlayer)
+    if GetCurrentPlayer() == "Red" then
+        DrawSix(RedPlayer)
+        EndTurn()
+    end
 end
 
 function RedPlayerDrawsOne()
@@ -933,7 +977,10 @@ function RedPlayerPlaysHand()
 end
 
 function PurplePlayerDrawsSix()
-    DrawSix(PurplePlayer)
+    if GetCurrentPlayer() == "Purple" then
+        DrawSix(PurplePlayer)
+        EndTurn("Purple")
+    end
 end
 
 function PurplePlayerDrawsOne()
@@ -956,7 +1003,10 @@ function PurplePlayerPlaysHand()
 end
 
 function GreenPlayerDrawsSix()
-    DrawSix(GreenPlayer)
+    if CurrentPlayer() == "Green" then
+        DrawSix(GreenPlayer)
+        EndTurn()
+    end
 end
 
 function GreenPlayerDrawsOne()
@@ -979,7 +1029,10 @@ function GreenPlayerPlaysHand()
 end
 
 function WhitePlayerDrawsSix()
-    DrawSix(WhitePlayer)
+    if GetCurrentPlayer() == "White" then
+        DrawSix(WhitePlayer)
+        EndTurn()
+    end
 end
 
 function WhitePlayerDrawsOne()
@@ -1002,7 +1055,10 @@ function WhitePlayerPlaysHand()
 end
 
 function BluePlayerDrawsSix()
-    DrawSix(BluePlayer)
+    if GetCurrentPlayer() == "Blue" then
+        DrawSix(BluePlayer)
+        EndTurn()
+    end
 end
 
 function BluePlayerDrawsOne()
@@ -1128,8 +1184,44 @@ function cleanPlayZone(player)
     end
 end
 
-function SetupPlayer()
+function EndTurn()
+    if CurrentTurn + 1 > #getSeatedPlayers() then
+        CurrentTurn = 1
+    else
+        CurrentTurn = CurrentTurn + 1
+    end
+    broadcastToAll(Players[CurrentTurn] .. " Players Turn", Players[CurrentTurn])
 
+    --check for Skittering Xenomorphs
+    for i=1, ComplexSize do
+        for j,v in pairs(Complexes[i].getObjects()) do
+            if v.type == 'Card' then
+                if v.getDescription() == "Skittering" and v.getRotation().z < 1 then
+                    v.flip()
+                end
+            end
+        end
+    end
+end
+
+function GetPreviousPlayer()
+    if CurrentTurn - 1 == 0 then
+        return Players[#getSeatedPlayers()]
+    else
+        return Players[CurrentTurn - 1]
+    end
+end
+
+function GetNextPlayer()
+    if CurrentTurn + 1 > #getSeatedPlayers() then
+        return Players[1]
+    else
+        return Players[CurrentTurn + 1]
+    end
+end
+
+function GetCurrentPlayer()
+    return Players[CurrentTurn]
 end
 
 --Deal the randomly chosen avatar to a player
@@ -1156,7 +1248,6 @@ function DealAvatar(player, number, avatars)
         end
     end
     Wait.frames(function() player.drawZone.getObjects()[1].shuffle() end, 250)
-    Wait.frames(function() DrawSix(player) end, 350)
 end
 
 --get the player given their color
@@ -1384,6 +1475,7 @@ function ToggleRemovePlayers()
 end
 
 function StartGame()
+    GetEmptyComplex(ComplexSize) --this is called here because TTS sucks and always returns 4 on the first call even if the first empty is 5
     RemovePlayers()
     closePanel()
     SetupButtons()
@@ -1423,21 +1515,29 @@ function StartGame()
     end
 
     Wait.frames(function() SetupMovie(movie, barracks) end, 500)
+    CreatePlayers()
+end
 
+function CreatePlayers()
     local players = getSeatedPlayers()
+    local possiblePlayers = ({"Blue", "White", "Green", "Purple", "Red"})
+    for i, v in pairs(players) do
+        for j = 1, 5 do
+            if possiblePlayers[j] == v then
+                table.insert(Players, i, v)
+                Wait.frames(function() DrawSix(GetPlayer(v)) end, 350)
+            end
+        end
+    end
     math.randomseed(os.time())
-    local number = math.random(#getSeatedPlayers())
-    broadcastToAll(players[number] .. " goes first!", players[number])
+    local number = math.random(#Players)
+    CurrentTurn = number
+    broadcastToAll(Players[number] .. " goes first!", Players[number])
 end
 
 function SetupMovie(mov, barracks)
     local obj
     if mov > 0 then
-        -- if Locations[mov].getObjects()[1].tag == 'Card' then
-        --     loc = Locations[mov].getObjects()[1]
-        -- else
-        --     loc = Locations[mov].getObjects()[2]
-        -- end
         ChosenLocation = Locations[mov]
         if Objectives[mov].getObjects()[1].tag == 'Deck' then
             obj = Objectives[mov].getObjects()[1]
@@ -1933,7 +2033,7 @@ function CompleteObjective()
             v.setPosition(DiscardedHazards.getPosition())
             Objective.removeButton(0)
             broadcastToAll("YOU WON! CONGRATULATIONS!", {r=1, g=1, b=1})
-            Celebrate()
+            --Celebrate()
         elseif v.tag == 'Deck' then
             v.takeObject().setPosition(DiscardedHazards.getPosition())
         end
@@ -1941,27 +2041,27 @@ function CompleteObjective()
     broadcastToAll("OBJECTIVE COMPLETE!", {r=1, g=1, b=1})
 end
 
-function ScanComplex1()
-    ScanComplex(1)
+function ScanComplex1(obj, playerColor, click)
+    ScanComplex(1, playerColor)
 end
 
-function ScanComplex2()
-    ScanComplex(2)
+function ScanComplex2(obj, playerColor, click)
+    ScanComplex(2, playerColor)
 end
 
-function ScanComplex3()
-    ScanComplex(3)
+function ScanComplex3(obj, playerColor, click)
+    ScanComplex(3, playerColor)
 end
 
-function ScanComplex4()
-    ScanComplex(4)
+function ScanComplex4(obj, playerColor, click)
+    ScanComplex(4, playerColor)
 end
 
-function ScanComplex5()
-    ScanComplex(5)
+function ScanComplex5(obj, playerColor, click)
+    ScanComplex(5, playerColor)
 end
 
-function ScanComplex(comp)
+function ScanComplex(comp, playerColor)
     local card = nil
     for i, v in pairs(Complexes[comp].getObjects()) do
         if v.tag == 'Card' then
@@ -1975,16 +2075,33 @@ function ScanComplex(comp)
     Wait.frames(function()
         if card ~= nil then
             if card.getDescription() ~= '' then
-                CheckCard(card)
+                CheckCard(card, "Complex")
             end
         end
     end, 200)
 end
 
-function CheckCard(card)
+function CheckCard(card, area)
     CheckObjectives(card)
     if card.getDescription() == "Hazard" then
-        CheckHazards(card)
+        CheckHazards(card, area)
+    end
+    if card.getDescription() == "Event" then
+        CheckEvents(card)
+    else
+        if card.getDescription() == "Jonesy" then
+            if area == "Complex" then
+                broadcastToAll("You found Jonesy! " .. GetCurrentPlayer() .. " chooses who will keep him!", GetCurrentPlayer())
+                Wait.frames(function()
+                    card.setPositionSmooth(GetPlayer(GetCurrentPlayer()).playZone.getPosition(), false, false)
+                end, 100)
+            else
+                Wait.frames(function()
+                    card.setPositionSmooth(DeadCharacters.getPosition(), false, false)
+                end, 100)
+                broadcastToAll("You didn't find Jonesy in time. He's dead.", GetCurrentPlayer())
+            end
+        end
     end
 end
 
@@ -2023,9 +2140,31 @@ function CheckObjectives(card)
             end, 100)
         end
     end
+    if description == "VentilationSeal" then
+        Wait.frames(function()
+            card.setPositionSmooth(ComplexTop5.getPosition(), false, false)
+        end, 100)
+        broadcastToAll("Ventilation Seal found! Pay 2 space bucks while the Ventilation Shafts are cleared to complete the objective!", {r=1, g=1, b=1})
+        ComplexTop5.createButton({
+            click_function = "BlockVentShaft",
+            function_owner = Global,
+            label          = "Pay 2",
+            position       = {0, -.5, .7},
+            rotation       = {0,180,0},
+            width          = 500,
+            height         = 100,
+            font_size      = 80,
+            color          = {0, 0, 0},
+            font_color     = {1, 1, 1},
+        })
+    end
+    if description == "AirlockControls" then
+        card.setPosition(ComplexTop1.getPosition())
+        broadcastToAll("Airlock Controls found! Pay 3 to move an enemy to the Airlock.", {r=1, g=1, b=1})
+    end
 end
 
-function CheckHazards(card)
+function CheckHazards(card, area)
     HazardCount = HazardCount + 1
     local throwAwayHazard = true
     local index = 0
@@ -2038,11 +2177,11 @@ function CheckHazards(card)
         if HazardCount == 1 then
             broadcastToAll("First Hazard found, adding two cards to The Complex", {0.129, 0.694, 0.607})
             Wait.frames(function()
-                PushComplex(5)
+                PushComplex(ComplexSize)
             end, 200)
             Wait.frames(function()
-                PushComplex(5)
-            end, 600)
+                PushComplex(ComplexSize)
+            end, 300)
         elseif HazardCount == 2 then
             local topCard = nil
             for i, v in pairs(Hive.getObjects()) do
@@ -2057,11 +2196,26 @@ function CheckHazards(card)
                 Wait.frames(function()
                     RotateCombatZone(topCard)
                 end, 100)
+                Wait.frames(function()
+                    if topCard.getDescription() ~= nil then
+                        CheckCard(topCard, "CombatZone")
+                    end
+                end, 200)
             end
             broadcastToAll("Second Hazard found, adding top card of the hive to Combat Zone", {0.129, 0.694, 0.607})
         elseif HazardCount >= 3 then
             throwAwayHazard = false
-            broadcastToAll("Third Hazard found, pay 8 to disarm self-destruct before reaching Combat Zone", {0.129, 0.694, 0.607})
+            if area == "CombatZone" then
+                throwAwayHazard = true
+                broadcastToAll("Self-destruct sequence not disarmed in time! Three strikes to each player!", {0.129, 0.694, 0.607})
+                for i,v in pairs(Players) do
+                    GainStrike(nil, v, nil)
+                    GainStrike(nil, v, nil)
+                    GainStrike(nil, v, nil)
+                end
+            else
+                broadcastToAll("Third Hazard found, pay 8 to disarm self-destruct before reaching Combat Zone", {0.129, 0.694, 0.607})
+            end
         end
     end
 
@@ -2070,6 +2224,79 @@ function CheckHazards(card)
             card.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
          end, 100)
      end
+end
+
+function CheckEvents(card)
+    local sendToDiscard = true
+    local objective = GetCurrentObjective()
+    if objective.guid == SOSCard then
+        broadcastToAll("Event! " .. GetCurrentPlayer() .. " and " .. GetNextPlayer() .. " each gain a Strike!", {r=1, g=0, b=0})
+        GainStrike(nil, GetCurrentPlayer(), nil)
+        GainStrike(nil, GetNextPlayer(), nil)
+    elseif objective.guid == NoOneCanHearYouScreamCard then
+        broadcastToAll("Event! " .. GetNextPlayer() .. " discards two cards at random!", {r=1, g=0, b=0})
+        DiscardRandomCard(GetNextPlayer())
+        Wait.frames(function()
+            DiscardRandomCard(GetNextPlayer())
+        end, 100)
+    elseif objective.guid == PerfectOrganismCard then
+        broadcastToAll("Event! Moving leftmost card in the Complex to the Combat Zone!", {r=1, g=0, b=0})
+        local moved = false
+        for i=1, ComplexSize do
+            if moved == false then
+                for j,v in pairs(Complexes[i].getObjects()) do
+                    if v.type == 'Card' then
+                        RotateCombatZone(v)
+                        if v.getRotation().z > 1 then
+                            v.flip()
+                        end
+                        if v.getDescription() ~= '' then
+                            Wait.frames(function()
+                                CheckCard(v, "CombatZone")
+                            end,100)
+                        end
+                        moved = true
+                    end
+                end
+            end
+        end
+    end
+
+    --check for eggs on the board
+    for i,v in pairs(PlayZones) do
+        for j,k in pairs(v.getObjects()) do
+            if k.type == 'Card' then
+                if k.getDescription() == 'Egg' and k.getRotation().z < 1 then
+                    k.setPosition(DeadEnemies.getPosition())
+                    local hatcheryDeck = Hatchery.getObjects()
+                    local faceHugger
+                    if hatcheryDeck[1].type == 'Deck' or hatcheryDeck[1].type == 'Card' then
+                        faceHugger = hatcheryDeck[1].takeObject()
+                    else
+                        faceHugger = hatcheryDeck[2].takeObject()
+                    end
+                    faceHugger.setPositionSmooth(GetPlayer(GetCurrentPlayer()).playZone.getPosition(), false, false)
+                    broadcastToAll("AN EGG HAS HATCHED AND RELEASED A FACEHUGGER ON " .. GetCurrentPlayer() .. "! YOU HAVE ONE TURN TO KILL IT! \n(return dead facehuggers to hatchery, not to 'Dead Enemies')", {r=1, g=0, b=0})
+                end
+            end
+        end
+    end
+
+    if sendToDiscard == true then
+        Wait.frames(function()
+            card.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
+        end, 100)
+    end
+end
+
+function GetCurrentObjective()
+    for i,v in pairs(Objective.getObjects()) do
+        if v.type == 'Deck' then
+            return v.getObjects()[#v.getObjects()]
+        elseif v.type == 'Card' then
+            return v
+        end
+    end
 end
 
 function GainStrike(obj, playerColor, click)
@@ -2084,17 +2311,142 @@ function GainStrike(obj, playerColor, click)
             v.setPositionSmooth(player.strikeZone.getPosition(), false, false)
         end
     end
-    --PushComplex(5)
+end
+
+function DiscardRandomCard(playerColor)
+    local player = GetPlayer(playerColor)
+    local handZone = player.handZone.getObjects()
+    local hand = ({})
+    local count = 0
+    for i,v in pairs(handZone) do
+        if v.type == 'Card' then
+            count = count + 1
+            table.insert(hand, count, v)
+        end
+    end
+    math.randomseed(os.time())
+    local number = math.random(count)
+    if count > 0 then
+        hand[number].setPosition(player.discardZone.getPosition())
+    end
+end
+
+function BlockVentShaft()
+    for i, v in pairs(Complex5.getObjects()) do
+        if v.type == 'Deck' or v.type == 'Card' then
+            broadcastToAll("The Ventilation Shafts are not clear.", {r=1, g=0, b=0})
+            return
+        end
+    end
+    ComplexTop5.removeButton(0)
+    Complex5.removeButton(0)
+    ComplexSize = 4
+    for i,v in pairs(ComplexTop5.getObjects()) do
+        if v.type == 'Card' then
+            v.setPosition(DiscardedHazards.getPosition())
+        end
+    end
+    Wait.frames(function()
+        for i,v in pairs(Hive.getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                v.setPosition(Complex5.getPosition())
+                Hive.setPosition(Complex5.getPosition())
+            end
+        end
+    end, 100)
+    broadcastToAll("The Ventilation Shaft has been blocked!", {r=1, g=1, b=1})
+    CompleteObjective()
 end
 
 function PushComplexButton()
-    PushComplex(5)
+    PushComplex(ComplexSize)
 end
 
 function PushComplex(index)
     local found = false
     local loc = nil
-    local emptyIndex
+    local emptyIndex = GetEmptyComplex(index)
+
+    if emptyIndex == index then
+        PushFinalize(index)
+        return
+    end
+
+    if emptyIndex == 0 then --no empty slots
+        for i, v in pairs(Complex1.getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                if v.getDescription() == "Egg" and v.getRotation().z < 1 then
+                    break
+                end
+                if v.getRotation().z > 1 then
+                    v.flip()
+                end
+                if v.getDescription() ~= '' then
+                    CheckCard(v, "CombatZone")
+                end
+                RotateCombatZone(v)
+                emptyIndex = 1
+            end
+        end
+    end
+    if emptyIndex == 0 then--Full complex and egg is in complex slot 1
+        for i = 2, index do
+            for j, v in pairs(Complexes[i].getObjects()) do
+                if (v.type == 'Card' or v.type == 'Deck') then
+                    if (v.getDescription() == "Egg" and v.getRotation().z < 1) then
+                        break
+                    else
+                        emptyIndex = i
+                        if v.getRotation().z > 1 then
+                            v.flip()
+                        end
+                        if v.getDescription() ~= '' then
+                            CheckCard(v, "CombatZone")
+                        end
+                        RotateCombatZone(v)
+                        goto continue
+                    end
+                end
+            end
+        end
+    end
+    ::continue::
+    if emptyIndex == 0 then
+        PushFinalize(emptyIndex)
+        return
+    end
+
+    local skip = 1
+    local found = false
+    local cardSent = false
+    local newEmptyIndex = 0
+    for i = 1, index - emptyIndex do
+        found = false
+        for j, v in pairs(Complexes[emptyIndex + i].getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                if v.getDescription() == "Egg" and v.getRotation().z < 1 then
+                    break
+                else
+                    v.setPosition(Complexes[(emptyIndex + i) - skip].getPosition())
+                    newEmptyIndex = emptyIndex + i
+                    skip = 1
+                    found = true
+                    cardSent = true
+                end
+            end
+        end
+        if found == false then
+            skip = skip + 1
+        end
+    end
+    if cardSent == true then
+        PushFinalize(newEmptyIndex)
+    else
+        PushFinalize(emptyIndex)
+    end
+end
+
+function GetEmptyComplex(index)
     for i = 0, index do
         if index - i == 0 then
             break
@@ -2105,150 +2457,30 @@ function PushComplex(index)
             end
         end
         if found == false then
-            emptyIndex = index - i
-            loc = Complexes[emptyIndex]
-            break
+            return index - i
         end
         found = false
     end
-    if emptyIndex == index then
-        PushFinalize(index)
-        return
-    end
-
-    if loc == nil then
-        for i, v in pairs(Complex1.getObjects()) do
-            if v.type == 'Card' or v.type == 'Deck' then
-                v.flip()
-                RotateCombatZone(v)
-            end
-        end
-        emptyIndex = 1
-    end
-
-    for i = 1, index - emptyIndex do
-        for j, v in pairs(Complexes[emptyIndex + i].getObjects()) do
-            if v.type == 'Card' or v.type == 'Deck' then
-                v.setPosition(Complexes[(emptyIndex + i) - 1].getPosition())
-            end
-        end
-    end
-    PushFinalize(index)
+    return 0
 end
-
--- function PushComplex(index)
---     local isPushingCard = false
---     local cardPushes
---
---     if index == 1 then -- base case
---         for i, v in pairs(Complexes[index].getObjects()) do
---             if v.getDescription() == "Egg" and v.getRotation().z == 0 then
---                 goto continue
---             end
---             if v.tag == 'Card' then
---                 if v.getRotation().z > 100 then
---                     v.flip()
---                     if v.getDescription() ~= '' then
---                         CheckCard(v)
---                     end
---                 end
---                 RotateCombatZone(v)
---             elseif v.tag == 'Deck' then
---                 RotateCombatZone(v)
---                 if v.getRotation().z == 180 then
---                     v.flip()
---                     if v.getDescription() ~= '' then
---                         CheckCard(v)
---                     end
---                 end
---             end
---             ::continue::
---         end
---         return
---     end
---
---     for i, v in pairs(Complexes[index].getObjects()) do
---         if v.tag == 'Card' then
---             isPushingCard = true
---             cardPushes = v
---         elseif v.tag == 'Deck' then
---             isPushingCard = true
---             cardPushes = v
---         end
---     end
---
---     if isPushingCard == false then
---         if index == 5 then
---             PushFinalize(index)
---         end
---         return
---     end
---
---         PushComplex(index - 1)
---
---
---
---     local complex = PushSingleCard(index)
---     if complex == nil then
---         RotateCombatZone(cardPushes)
---     else
---         cardPushes.setPosition(complex.getPosition())
---     end
---
---     if index == 5 then
---         --Wait.frames(function()
---             PushFinalize(index)
---         --end, 150)
---     end
---
--- end
-
-function PushSingleCard(index)
-    local found = false
-    for i = 1, index do
-        if index - i == 0 then
-            return nil
-        end
-        for j, v in pairs(Complexes[index - i].getObjects()) do
-            if v.type == 'Card' or v.type == 'Deck' then
-                found = true
-            end
-        end
-        if found == false then
-            return Complexes[index - i]
-        end
-        found = false
-    end
-end
-
--- function PushSingleCard(card, index)
---     local empty = true
---     for i=1, index do
---         if index - i == 1 then
---             RotateCombatZone(card)
---             return
---         end
---         for j, v in pairs(Complexes[index - i].getObjects()) do
---             if v.type == 'Card' or v.type == 'Deck' then
---                 empty = false
---             end
---         end
---         if empty == true then
---             card.setPositionSmooth(Complexes[index - i].getPosition(), false, false)
---             return
---         end
---     end
--- end
 
 function PushFinalize(index)
     local hiveFound = false
     for i, v in pairs(Hive.getObjects()) do
         if v.tag == 'Card' then
-            v.setPosition(Complexes[index].getPosition())
+            if index == 0 then
+                RotateCombatZone(v)
+            else
+                v.setPosition(Complexes[index].getPosition())
+            end
             hiveFound = true
         elseif v.tag == 'Deck' then
             local card = v.takeObject()
-            card.setPosition(Complexes[index].getPosition())
+            if index == 0 then
+                RotateCombatZone(v)
+            else
+                card.setPosition(Complexes[index].getPosition())
+            end
             hiveFound = true
         end
     end
@@ -2267,30 +2499,20 @@ function PushFinalize(index)
                     v.setPosition(Hive.getPosition())
                 end
             end
-            Wait.frames(function() PushFinalize(index) end, 50)
+            Wait.frames(function()
+                for i, v in pairs(Hive.getObjects()) do
+                    if v.type == 'Deck' then
+                        v.shuffle()
+                    end
+                end
+            end, 50)
+            Wait.frames(function() PushFinalize(index) end, 100)
         end
     end
 end
 
 function RotateCombatZone(card)
     local found = false
-
-    local nostromo = false
-    for i, v in pairs(Locations) do
-        if v == ChosenLocation and i == 1 then
-            nostromo = true
-        end
-    end
-    if card.getDescription() == "Hazard" and nostromo == true and HazardCount == 3 then
-        for i, v in pairs(getSeatedPlayers()) do
-            GainStrike(nil, v, nil)
-            GainStrike(nil, v, nil)
-            GainStrike(nil, v, nil)
-        end
-        card.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
-        broadcastToAll("Third Hazard reached Combat Zone, all players recieve 3 strikes!", {0.129, 0.694, 0.607})
-    end
-
     for i, v in pairs(CombatZone1.getObjects()) do
         if v.type == 'Card' then
             found = true
