@@ -1,952 +1,955 @@
 function onload()
-numTimers = 0
---PLAY AREA--
-StrikesDeck = getObjectFromGUID("963384")
-SergeantDeck = getObjectFromGUID("5213e6")
-Objective = getObjectFromGUID("58a60d")
-Hive = getObjectFromGUID("44e514")
-Location = getObjectFromGUID("233ca6")
-Barracks = getObjectFromGUID("ae55f0")
-HQ1 = getObjectFromGUID("c2de73")
-HQ2 = getObjectFromGUID("4476a3")
-HQ3 = getObjectFromGUID("886684")
-HQ4 = getObjectFromGUID("49d1ec")
-HQ5 = getObjectFromGUID("39d6f7")
-DiscardedHazards = getObjectFromGUID("ae65de")
-DeadEnemies = getObjectFromGUID("72db01")
-Hatchery = getObjectFromGUID("81b2be")
-BoardBag = getObjectFromGUID("aeb95f")
-DeadCharacters = getObjectFromGUID("d50720")
+    numTimers = 0
+    --PLAY AREA--
+    StrikesDeck = getObjectFromGUID("963384")
+    SergeantDeck = getObjectFromGUID("5213e6")
+    Objective = getObjectFromGUID("58a60d")
+    Hive = getObjectFromGUID("44e514")
+    Location = getObjectFromGUID("233ca6")
+    Barracks = getObjectFromGUID("ae55f0")
+    HQ1 = getObjectFromGUID("c2de73")
+    HQ2 = getObjectFromGUID("4476a3")
+    HQ3 = getObjectFromGUID("886684")
+    HQ4 = getObjectFromGUID("49d1ec")
+    HQ5 = getObjectFromGUID("39d6f7")
+    DiscardedHazards = getObjectFromGUID("ae65de")
+    DeadEnemies = getObjectFromGUID("72db01")
+    Hatchery = getObjectFromGUID("81b2be")
+    BoardBag = getObjectFromGUID("aeb95f")
+    DeadCharacters = getObjectFromGUID("d50720")
 
-BoardPosition = { -1.79, 1.07, 2.9 }
+    BoardPosition = { -1.79, 1.07, 2.9 }
 
-DroneDeckAmounts = ({
-    {0, 0, 0},
-    {0, 1, 2},
-    {2, 3, 4},
-    {4, 5, 6},
-    {4, 5, 6}
-})
+    DroneDeckAmounts = ({
+        {0, 0, 0},
+        {0, 1, 2},
+        {2, 3, 4},
+        {4, 5, 6},
+        {4, 5, 6}
+    })
 
-TheHQ = ({
-    HQ1,
-    HQ2,
-    HQ3,
-    HQ4,
-    HQ5
-})
+    TheHQ = ({
+        HQ1,
+        HQ2,
+        HQ3,
+        HQ4,
+        HQ5
+    })
 
-        --GENERAL SETUP--
-AlienSergeants = getObjectFromGUID("276a87")
-PredatorSergeants = getObjectFromGUID("bd813e")
-AlienDroneDeck = getObjectFromGUID("60cb24")
-DroneDeckExp = getObjectFromGUID("da8b27")
-PredatorDroneDeck = getObjectFromGUID("f8552a")
-ExpansionStrikes = getObjectFromGUID("e54364")
-AlienStrikeDeck = getObjectFromGUID("b21434")
-PredatorStrikeDeck = getObjectFromGUID("1c5dc0")
-HatcheryDeck = getObjectFromGUID("1cd4cb")
-Complex1 = getObjectFromGUID("bb4b29")
-Complex2 = getObjectFromGUID("828d27")
-Complex3 = getObjectFromGUID("ac3d6a")
-Complex4 = getObjectFromGUID("32a1f3")
-Complex5 = getObjectFromGUID("80c84d")
-ComplexTop1 = getObjectFromGUID("c5a0b7")
-ComplexTop2 = getObjectFromGUID("cce70b")
-ComplexTop3 = getObjectFromGUID("9f1a5f")
-ComplexTop4 = getObjectFromGUID("888791")
-ComplexTop5 = getObjectFromGUID("07a848")
-CombatZone1 = getObjectFromGUID("4ce3a0")
-CombatZone2 = getObjectFromGUID("952cbe")
-CombatZone3 = getObjectFromGUID("1816a5")
-Operations1 = getObjectFromGUID("c6f84a")
-Operations2 = getObjectFromGUID("bbcfd1")
+            --GENERAL SETUP--
+    AlienSergeants = getObjectFromGUID("276a87")
+    PredatorSergeants = getObjectFromGUID("bd813e")
+    AlienDroneDeck = getObjectFromGUID("60cb24")
+    DroneDeckExp = getObjectFromGUID("da8b27")
+    PredatorDroneDeck = getObjectFromGUID("f8552a")
+    ExpansionStrikes = getObjectFromGUID("e54364")
+    AlienStrikeDeck = getObjectFromGUID("b21434")
+    PredatorStrikeDeck = getObjectFromGUID("1c5dc0")
+    HatcheryDeck = getObjectFromGUID("1cd4cb")
+    Complex1 = getObjectFromGUID("bb4b29")
+    Complex2 = getObjectFromGUID("828d27")
+    Complex3 = getObjectFromGUID("ac3d6a")
+    Complex4 = getObjectFromGUID("32a1f3")
+    Complex5 = getObjectFromGUID("80c84d")
+    ComplexTop1 = getObjectFromGUID("c5a0b7")
+    ComplexTop2 = getObjectFromGUID("cce70b")
+    ComplexTop3 = getObjectFromGUID("9f1a5f")
+    ComplexTop4 = getObjectFromGUID("888791")
+    ComplexTop5 = getObjectFromGUID("07a848")
+    CombatZone1 = getObjectFromGUID("4ce3a0")
+    CombatZone2 = getObjectFromGUID("952cbe")
+    CombatZone3 = getObjectFromGUID("1816a5")
+    Operations1 = getObjectFromGUID("c6f84a")
+    Operations2 = getObjectFromGUID("bbcfd1")
 
-ExpansionDronesSelected = false
-CovenantDronesSelected = false
-RandomizeAvatarsSelected = false
-BaseAvatarsSelected = true
-ExpansionAvatarsSelected = true
-CovenantAvatarsSelected = true
-PredatorAvatarsSelected = true
-Predator2AvatarsSelected = true
-ExpansionStrikesSelected = false
-RandomBarracksSelected = false
-BaseBarracksSelected = true
-ExpansionBarracksSelected = true
-CovenantBarracksSelected = true
-PredatorBarracksSelected = true
-AlienMovieSelected = false
-RemoveUnseatedPlayers = true
-BoardSelected = "Alien"
-HiveDeckRanOut = false
-Players = ({})
-CurrentTurn = 0
-ComplexSize = 5
+    ExpansionDronesSelected = false
+    CovenantDronesSelected = false
+    RandomizeAvatarsSelected = false
+    BaseAvatarsSelected = true
+    ExpansionAvatarsSelected = true
+    CovenantAvatarsSelected = true
+    PredatorAvatarsSelected = true
+    Predator2AvatarsSelected = true
+    ExpansionStrikesSelected = false
+    RandomBarracksSelected = false
+    BaseBarracksSelected = true
+    ExpansionBarracksSelected = true
+    CovenantBarracksSelected = true
+    PredatorBarracksSelected = true
+    AlienMovieSelected = false
+    RemoveUnseatedPlayers = true
+    BoardSelected = "Alien"
+    HiveDeckRanOut = false
+    Players = ({})
+    CurrentTurn = 0
+    ComplexSize = 5
+    PrisonedAvatarPlayer = ""
 
-SOSPartFound = false
-HazardCount = 0
+    SOSPartFound = false
+    HazardCount = 0
 
-Movie1Selected = false
-Movie2Selected = false
-Movie3Selected = false
-Movie4Selected = false
-Movie5Selected = false
-Movie6Selected = false
-Movie7Selected = false
-Movie8Selected = false
-Movie9Selected = false
+    Movie1Selected = false
+    Movie2Selected = false
+    Movie3Selected = false
+    Movie4Selected = false
+    Movie5Selected = false
+    Movie6Selected = false
+    Movie7Selected = false
+    Movie8Selected = false
+    Movie9Selected = false
 
-MovieSelected = ({
-    Movie1Selected,
-    Movie2Selected,
-    Movie3Selected,
-    Movie4Selected,
-    Movie5Selected,
-    Movie6Selected,
-    Movie7Selected,
-    Movie8Selected,
-    Movie9Selected
-})
+    MovieSelected = ({
+        Movie1Selected,
+        Movie2Selected,
+        Movie3Selected,
+        Movie4Selected,
+        Movie5Selected,
+        Movie6Selected,
+        Movie7Selected,
+        Movie8Selected,
+        Movie9Selected
+    })
 
-MovieButtons = ({
-    "Movie1Button",
-    "Movie2Button",
-    "Movie3Button",
-    "Movie4Button",
-    "Movie5Button",
-    "Movie6Button",
-    "Movie7Button",
-    "Movie8Button",
-    "Movie9Button"
-})
+    MovieButtons = ({
+        "Movie1Button",
+        "Movie2Button",
+        "Movie3Button",
+        "Movie4Button",
+        "Movie5Button",
+        "Movie6Button",
+        "Movie7Button",
+        "Movie8Button",
+        "Movie9Button"
+    })
 
-Sergeants = ({
-    AlienSergeants,
-    PredatorSergeants
-})
+    Sergeants = ({
+        AlienSergeants,
+        PredatorSergeants
+    })
 
-Strikes = ({
-    AlienStrikeDeck,
-    PredatorStrikeDeck
-})
+    Strikes = ({
+        AlienStrikeDeck,
+        PredatorStrikeDeck
+    })
 
-Drones = ({
-    AlienDroneDeck,
-    PredatorDroneDeck
-})
+    Drones = ({
+        AlienDroneDeck,
+        PredatorDroneDeck
+    })
 
-Operations = ({
-    Operations1,
-    Operations2
-})
+    Operations = ({
+        Operations1,
+        Operations2
+    })
 
-Complexes = ({
-    Complex1,
-    Complex2,
-    Complex3,
-    Complex4,
-    Complex5
-})
+    Complexes = ({
+        Complex1,
+        Complex2,
+        Complex3,
+        Complex4,
+        Complex5
+    })
 
-ComplexesTop = ({
-    ComplexTop1,
-    ComplexTop2,
-    ComplexTop3,
-    ComplexTop4,
-    ComplexTop5
-})
+    ComplexesTop = ({
+        ComplexTop1,
+        ComplexTop2,
+        ComplexTop3,
+        ComplexTop4,
+        ComplexTop5
+    })
 
-CombatZones = ({
-    CombatZone1,
-    CombatZone2,
-    CombatZone3
-})
+    CombatZones = ({
+        CombatZone1,
+        CombatZone2,
+        CombatZone3
+    })
 
-PlayZones = ({
-    Complex1,
-    Complex2,
-    Complex3,
-    Complex4,
-    Complex5,
-    ComplexTop1,
-    ComplexTop2,
-    ComplexTop3,
-    ComplexTop4,
-    ComplexTop5,
-    CombatZone1,
-    CombatZone2,
-    CombatZone3
-})
-        --NON INTERACTABLE OBJECTS--
-RedPlayBoard = getObjectFromGUID("66fd64")
-RedPlayBoard.interactable = false
-RedStrikes = getObjectFromGUID("7b5baf")
-RedStrikes.interactable = false
-RedDraw = getObjectFromGUID("3d84f0")
-RedDraw.interactable = false
-RedAvatar = getObjectFromGUID("3313bb")
-RedAvatar.interactable = false
-RedDiscard = getObjectFromGUID("810273")
-RedDiscard.interactable = false
-PurplePlayBoard = getObjectFromGUID("60d9ca")
-PurplePlayBoard.interactable = false
-PurpleStrikes = getObjectFromGUID("692af0")
-PurpleStrikes.interactable = false
-PurpleDraw = getObjectFromGUID("74fa8f")
-PurpleDraw.interactable = false
-PurpleAvatar = getObjectFromGUID("0ba496")
-PurpleAvatar.interactable = false
-PurpleDiscard = getObjectFromGUID("4cd4b1")
-PurpleDiscard.interactable = false
-GreenPlayBoard = getObjectFromGUID("526e37")
-GreenPlayBoard.interactable = false
-GreenStrikes = getObjectFromGUID("4cefbf")
-GreenStrikes.interactable = false
-GreenDraw = getObjectFromGUID("0789ec")
-GreenDraw.interactable = false
-GreenAvatar = getObjectFromGUID("855b44")
-GreenAvatar.interactable = false
-GreenDiscard = getObjectFromGUID("23d999")
-GreenDiscard.interactable = false
-WhitePlayBoard = getObjectFromGUID("287b8b")
-WhitePlayBoard.interactable = false
-WhiteStrikes = getObjectFromGUID("12bbf8")
-WhiteStrikes.interactable = false
-WhiteDraw = getObjectFromGUID("ab8729")
-WhiteDraw.interactable = false
-WhiteAvatar = getObjectFromGUID("abb6ad")
-WhiteAvatar.interactable = false
-WhiteDiscard = getObjectFromGUID("b9bc82")
-WhiteDiscard.interactable = false
-BluePlayBoard = getObjectFromGUID("3aa5dd")
-BluePlayBoard.interactable = false
-BlueStrikes = getObjectFromGUID("dc25fa")
-BlueStrikes.interactable = false
-BlueDraw = getObjectFromGUID("e3b464")
-BlueDraw.interactable = false
-BlueAvatar = getObjectFromGUID("4c3f48")
-BlueAvatar.interactable = false
-BlueDiscard = getObjectFromGUID("e1deb0")
-BlueDiscard.interactable = false
-MainTable = getObjectFromGUID("d7b6e1")
-MainTable.interactable = false
-MaintTableLegs = getObjectFromGUID("a96cb3")
-MaintTableLegs.interactable = false
-ObjectiveTable = getObjectFromGUID("336d7c")
-ObjectiveTable.interactable = false
-HardModeTable = getObjectFromGUID("7de9b9")
-HardModeTable.interactable = false
-AvatarAndBarracksTable = getObjectFromGUID("c4ca85")
-AvatarAndBarracksTable.interactable = false
-MotherAlienTable = getObjectFromGUID("506773")
-MotherAlienTable.interactable = false
+    PlayZones = ({
+        Complex1,
+        Complex2,
+        Complex3,
+        Complex4,
+        Complex5,
+        ComplexTop1,
+        ComplexTop2,
+        ComplexTop3,
+        ComplexTop4,
+        ComplexTop5,
+        CombatZone1,
+        CombatZone2,
+        CombatZone3
+    })
 
-        --LOCATIONS--
-Nostromo = getObjectFromGUID("b2a7b1")
-HadleysHope = getObjectFromGUID("518e19")
-Fury = getObjectFromGUID("18cfc0")
-Auriga = getObjectFromGUID("171d3b")
-Aviary = getObjectFromGUID("ca4739")
-Echiona = getObjectFromGUID("d59b60")
-Planet4 = getObjectFromGUID("3e039a")
-ValVerdeanJungle = getObjectFromGUID("612452")
-LosAngeles = getObjectFromGUID("6bdfab")
-ChosenLocation = nil
+    ColonistComplexes = ({"ColonistComplex1", "ColonistComplex2", "ColonistComplex3", "ColonistComplex4", "ColonistComplex5"})
+    ColonistCombatZones = ({"ColonistCombatZone1", "ColonistCombatZone2", "ColonistCombatZone3"})
+            --NON INTERACTABLE OBJECTS--
+    RedPlayBoard = getObjectFromGUID("66fd64")
+    RedPlayBoard.interactable = false
+    RedStrikes = getObjectFromGUID("7b5baf")
+    RedStrikes.interactable = false
+    RedDraw = getObjectFromGUID("3d84f0")
+    RedDraw.interactable = false
+    RedAvatar = getObjectFromGUID("3313bb")
+    RedAvatar.interactable = false
+    RedDiscard = getObjectFromGUID("810273")
+    RedDiscard.interactable = false
+    PurplePlayBoard = getObjectFromGUID("60d9ca")
+    PurplePlayBoard.interactable = false
+    PurpleStrikes = getObjectFromGUID("692af0")
+    PurpleStrikes.interactable = false
+    PurpleDraw = getObjectFromGUID("74fa8f")
+    PurpleDraw.interactable = false
+    PurpleAvatar = getObjectFromGUID("0ba496")
+    PurpleAvatar.interactable = false
+    PurpleDiscard = getObjectFromGUID("4cd4b1")
+    PurpleDiscard.interactable = false
+    GreenPlayBoard = getObjectFromGUID("526e37")
+    GreenPlayBoard.interactable = false
+    GreenStrikes = getObjectFromGUID("4cefbf")
+    GreenStrikes.interactable = false
+    GreenDraw = getObjectFromGUID("0789ec")
+    GreenDraw.interactable = false
+    GreenAvatar = getObjectFromGUID("855b44")
+    GreenAvatar.interactable = false
+    GreenDiscard = getObjectFromGUID("23d999")
+    GreenDiscard.interactable = false
+    WhitePlayBoard = getObjectFromGUID("287b8b")
+    WhitePlayBoard.interactable = false
+    WhiteStrikes = getObjectFromGUID("12bbf8")
+    WhiteStrikes.interactable = false
+    WhiteDraw = getObjectFromGUID("ab8729")
+    WhiteDraw.interactable = false
+    WhiteAvatar = getObjectFromGUID("abb6ad")
+    WhiteAvatar.interactable = false
+    WhiteDiscard = getObjectFromGUID("b9bc82")
+    WhiteDiscard.interactable = false
+    BluePlayBoard = getObjectFromGUID("3aa5dd")
+    BluePlayBoard.interactable = false
+    BlueStrikes = getObjectFromGUID("dc25fa")
+    BlueStrikes.interactable = false
+    BlueDraw = getObjectFromGUID("e3b464")
+    BlueDraw.interactable = false
+    BlueAvatar = getObjectFromGUID("4c3f48")
+    BlueAvatar.interactable = false
+    BlueDiscard = getObjectFromGUID("e1deb0")
+    BlueDiscard.interactable = false
+    MainTable = getObjectFromGUID("d7b6e1")
+    MainTable.interactable = false
+    MaintTableLegs = getObjectFromGUID("a96cb3")
+    MaintTableLegs.interactable = false
+    ObjectiveTable = getObjectFromGUID("336d7c")
+    ObjectiveTable.interactable = false
+    HardModeTable = getObjectFromGUID("7de9b9")
+    HardModeTable.interactable = false
+    AvatarAndBarracksTable = getObjectFromGUID("c4ca85")
+    AvatarAndBarracksTable.interactable = false
+    MotherAlienTable = getObjectFromGUID("506773")
+    MotherAlienTable.interactable = false
 
-        --OBJECTIVES, DRONES--
-Movie1Obj = getObjectFromGUID("c528d4")
-Movie2Obj = getObjectFromGUID("8a60bf")
-Movie3Obj = getObjectFromGUID("affd85")
-Movie4Obj = getObjectFromGUID("5a2262")
-Movie5Obj = getObjectFromGUID("379e64")
-Movie6Obj = getObjectFromGUID("983f6d")
-Movie7Obj = getObjectFromGUID("a1d5b7")
-Movie8Obj = getObjectFromGUID("60e9f5")
-Movie9Obj = getObjectFromGUID("db906f")
---movie 1
-SOS = getObjectFromGUID("27b322")
-SOSCard = "320c38"
-NoOneCanHearYouScream = getObjectFromGUID("49b42d")
-NoOneCanHearYouScreamCard = "5c00c3"
-PerfectOrganism = getObjectFromGUID("dff99f")
-PerfectOrganismCard = "9c164c"
---movie 2
-LastColony = getObjectFromGUID("018b01")
-MostlyComeAtNight = getObjectFromGUID("508bb8")
-WhosLayingEggs = getObjectFromGUID("d1fc36")
---movie 3
-WhereAreTheBrothers = getObjectFromGUID("9e6e4e")
-BeastIsOutThere = getObjectFromGUID("408edd")
-NobodyCanStopIt = getObjectFromGUID("46b193")
---movie 4
-Breakout = getObjectFromGUID("a0b5ab")
-YoureAThing = getObjectFromGUID("4b7f13")
-ShellBreed = getObjectFromGUID("128194")
---movie 5
-StrangeBehavior = getObjectFromGUID("39dc15")
-NewResidents = getObjectFromGUID("439743")
-RulerOfTheRoost = getObjectFromGUID("c98bde")
---movie 6
-Incubators = getObjectFromGUID("7e82b7")
-ReleaseTheHounds = getObjectFromGUID("d192e5")
-FinalCreation = getObjectFromGUID("f4ef5c")
---Movie 7
-RogueTransmission = getObjectFromGUID("5ebc77")
-DoMakeYourselvesAtHome = getObjectFromGUID("812989")
-TheLonelyPerfectionOfMyDream = getObjectFromGUID("2531f1")
---Movie 8
-ExpendableAssets = getObjectFromGUID("1dcfaa")
-FlaresFragsClaymores = getObjectFromGUID("ff2c04")
-GetToTheChoppa = getObjectFromGUID("07d8af")
---movie 9
-WarZone = getObjectFromGUID("cc66e8")
-PersonalLittleWar = getObjectFromGUID("25a23d")
-OtherWorldLifeForm = getObjectFromGUID("6bef1e")
+            --LOCATIONS--
+    Nostromo = getObjectFromGUID("b2a7b1")
+    HadleysHope = getObjectFromGUID("518e19")
+    Fury = getObjectFromGUID("18cfc0")
+    Auriga = getObjectFromGUID("171d3b")
+    Aviary = getObjectFromGUID("ca4739")
+    Echiona = getObjectFromGUID("d59b60")
+    Planet4 = getObjectFromGUID("3e039a")
+    ValVerdeanJungle = getObjectFromGUID("612452")
+    LosAngeles = getObjectFromGUID("6bdfab")
+    ChosenLocation = nil
 
-Objectives1 = ({
-    SOS,
-    LastColony,
-    WhereAreTheBrothers,
-    Breakout,
-    StrangeBehavior,
-    Incubators,
-    RogueTransmission,
-    ExpendableAssets,
-    WarZone
-})
+            --OBJECTIVES, DRONES--
+    Movie1Obj = getObjectFromGUID("c528d4")
+    Movie2Obj = getObjectFromGUID("8a60bf")
+    Movie3Obj = getObjectFromGUID("affd85")
+    Movie4Obj = getObjectFromGUID("5a2262")
+    Movie5Obj = getObjectFromGUID("379e64")
+    Movie6Obj = getObjectFromGUID("983f6d")
+    Movie7Obj = getObjectFromGUID("a1d5b7")
+    Movie8Obj = getObjectFromGUID("60e9f5")
+    Movie9Obj = getObjectFromGUID("db906f")
+    --movie 1
+    SOS = getObjectFromGUID("27b322")
+    SOSCard = "320c38"
+    NoOneCanHearYouScream = getObjectFromGUID("49b42d")
+    NoOneCanHearYouScreamCard = "5c00c3"
+    PerfectOrganism = getObjectFromGUID("dff99f")
+    PerfectOrganismCard = "9c164c"
+    --movie 2
+    LastColony = getObjectFromGUID("018b01")
+    MostlyComeAtNight = getObjectFromGUID("508bb8")
+    WhosLayingEggs = getObjectFromGUID("d1fc36")
+    --movie 3
+    WhereAreTheBrothers = getObjectFromGUID("9e6e4e")
+    BeastIsOutThere = getObjectFromGUID("408edd")
+    NobodyCanStopIt = getObjectFromGUID("46b193")
+    --movie 4
+    Breakout = getObjectFromGUID("a0b5ab")
+    YoureAThing = getObjectFromGUID("4b7f13")
+    ShellBreed = getObjectFromGUID("128194")
+    --movie 5
+    StrangeBehavior = getObjectFromGUID("39dc15")
+    NewResidents = getObjectFromGUID("439743")
+    RulerOfTheRoost = getObjectFromGUID("c98bde")
+    --movie 6
+    Incubators = getObjectFromGUID("7e82b7")
+    ReleaseTheHounds = getObjectFromGUID("d192e5")
+    FinalCreation = getObjectFromGUID("f4ef5c")
+    --Movie 7
+    RogueTransmission = getObjectFromGUID("5ebc77")
+    DoMakeYourselvesAtHome = getObjectFromGUID("812989")
+    TheLonelyPerfectionOfMyDream = getObjectFromGUID("2531f1")
+    --Movie 8
+    ExpendableAssets = getObjectFromGUID("1dcfaa")
+    FlaresFragsClaymores = getObjectFromGUID("ff2c04")
+    GetToTheChoppa = getObjectFromGUID("07d8af")
+    --movie 9
+    WarZone = getObjectFromGUID("cc66e8")
+    PersonalLittleWar = getObjectFromGUID("25a23d")
+    OtherWorldLifeForm = getObjectFromGUID("6bef1e")
 
-Objectives2 = ({
-    NoOneCanHearYouScream,
-    MostlyComeAtNight,
-    BeastIsOutThere,
-    YoureAThing,
-    NewResidents,
-    ReleaseTheHounds,
-    DoMakeYourselvesAtHome,
-    FlaresFragsClaymores,
-    PersonalLittleWar
-})
+    Objectives1 = ({
+        SOS,
+        LastColony,
+        WhereAreTheBrothers,
+        Breakout,
+        StrangeBehavior,
+        Incubators,
+        RogueTransmission,
+        ExpendableAssets,
+        WarZone
+    })
 
-Objectives3 = ({
-    PerfectOrganism,
-    WhosLayingEggs,
-    NobodyCanStopIt,
-    ShellBreed,
-    RulerOfTheRoost,
-    FinalCreation,
-    TheLonelyPerfectionOfMyDream,
-    GetToTheChoppa,
-    OtherWorldLifeForm
-})
+    Objectives2 = ({
+        NoOneCanHearYouScream,
+        MostlyComeAtNight,
+        BeastIsOutThere,
+        YoureAThing,
+        NewResidents,
+        ReleaseTheHounds,
+        DoMakeYourselvesAtHome,
+        FlaresFragsClaymores,
+        PersonalLittleWar
+    })
 
-Locations = ({
-    Nostromo,
-    HadleysHope,
-    Fury,
-    Auriga,
-    Aviary,
-    Echiona,
-    Planet4,
-    ValVerdeanJungle,
-    LosAngeles
-})
+    Objectives3 = ({
+        PerfectOrganism,
+        WhosLayingEggs,
+        NobodyCanStopIt,
+        ShellBreed,
+        RulerOfTheRoost,
+        FinalCreation,
+        TheLonelyPerfectionOfMyDream,
+        GetToTheChoppa,
+        OtherWorldLifeForm
+    })
 
-Objectives = ({
-    Movie1Obj,
-    Movie2Obj,
-    Movie3Obj,
-    Movie4Obj,
-    Movie5Obj,
-    Movie6Obj,
-    Movie7Obj,
-    Movie8Obj,
-    Movie9Obj
-})
-        --AVATARS--
---base game
-Medic = getObjectFromGUID("af7cc7")
-Priest = getObjectFromGUID("1c963a")
-Gunner = getObjectFromGUID("06363c")
-Technician = getObjectFromGUID("2f61b6")
-Commander = getObjectFromGUID("2a6ff9")
-Researcher = getObjectFromGUID("6103cf")
-Synthetic = getObjectFromGUID("bfc4de")
-Executive = getObjectFromGUID("10b1fe")
-Scout = getObjectFromGUID("745299")
-Mercenary = getObjectFromGUID("4aede5")
---expansion
-Odysseus = getObjectFromGUID("7bdeea")
-Administrator = getObjectFromGUID("af8aac")
-AnimalHandler = getObjectFromGUID("b0e8bf")
-Aeneas = getObjectFromGUID("46f5e8")
-SecurityChief = getObjectFromGUID("272ed6")
-Zoologist = getObjectFromGUID("1ae246")
-Daedalus = getObjectFromGUID("1f3df2")
-Heracles = getObjectFromGUID("6373e9")
-Theseus = getObjectFromGUID("aa6904")
-Veterinarian = getObjectFromGUID("9e638a")
---covenant
-Terraformist = getObjectFromGUID("7ada1d")
-Biologist = getObjectFromGUID("af2a9e")
-Navigator = getObjectFromGUID("1508de")
-Pilot = getObjectFromGUID("655508")
-CommunicationsOfficer = getObjectFromGUID("2e7fd7")
---Predator
-Guerrilla = getObjectFromGUID("675fc3")
-Tracker = getObjectFromGUID("5e279b")
-Radioman = getObjectFromGUID("da2ae7")
-CIAAgent = getObjectFromGUID("fd3c40")
-Lieutenant = getObjectFromGUID("3a826c")
---predator2
-Detective = getObjectFromGUID("c8e005")
-SwatOfficer = getObjectFromGUID("2ec9fc")
-OWLFAgent = getObjectFromGUID("a32b45")
-Reporter = getObjectFromGUID("718cf9")
-Gangster = getObjectFromGUID("6b048b")
+    Locations = ({
+        Nostromo,
+        HadleysHope,
+        Fury,
+        Auriga,
+        Aviary,
+        Echiona,
+        Planet4,
+        ValVerdeanJungle,
+        LosAngeles
+    })
 
-BaseGameAvatars = ({ --10
-    Medic,
-    Priest,
-    Gunner,
-    Technician,
-    Commander,
-    Researcher,
-    Synthetic,
-    Executive,
-    Scout,
-    Mercenary,
-})
+    Objectives = ({
+        Movie1Obj,
+        Movie2Obj,
+        Movie3Obj,
+        Movie4Obj,
+        Movie5Obj,
+        Movie6Obj,
+        Movie7Obj,
+        Movie8Obj,
+        Movie9Obj
+    })
+            --AVATARS--
+    --base game
+    Medic = getObjectFromGUID("af7cc7")
+    Priest = getObjectFromGUID("1c963a")
+    Gunner = getObjectFromGUID("06363c")
+    Technician = getObjectFromGUID("2f61b6")
+    Commander = getObjectFromGUID("2a6ff9")
+    Researcher = getObjectFromGUID("6103cf")
+    Synthetic = getObjectFromGUID("bfc4de")
+    Executive = getObjectFromGUID("10b1fe")
+    Scout = getObjectFromGUID("745299")
+    Mercenary = getObjectFromGUID("4aede5")
+    --expansion
+    Odysseus = getObjectFromGUID("7bdeea")
+    Administrator = getObjectFromGUID("af8aac")
+    AnimalHandler = getObjectFromGUID("b0e8bf")
+    Aeneas = getObjectFromGUID("46f5e8")
+    SecurityChief = getObjectFromGUID("272ed6")
+    Zoologist = getObjectFromGUID("1ae246")
+    Daedalus = getObjectFromGUID("1f3df2")
+    Heracles = getObjectFromGUID("6373e9")
+    Theseus = getObjectFromGUID("aa6904")
+    Veterinarian = getObjectFromGUID("9e638a")
+    --covenant
+    Terraformist = getObjectFromGUID("7ada1d")
+    Biologist = getObjectFromGUID("af2a9e")
+    Navigator = getObjectFromGUID("1508de")
+    Pilot = getObjectFromGUID("655508")
+    CommunicationsOfficer = getObjectFromGUID("2e7fd7")
+    --Predator
+    Guerrilla = getObjectFromGUID("675fc3")
+    Tracker = getObjectFromGUID("5e279b")
+    Radioman = getObjectFromGUID("da2ae7")
+    CIAAgent = getObjectFromGUID("fd3c40")
+    Lieutenant = getObjectFromGUID("3a826c")
+    --predator2
+    Detective = getObjectFromGUID("c8e005")
+    SwatOfficer = getObjectFromGUID("2ec9fc")
+    OWLFAgent = getObjectFromGUID("a32b45")
+    Reporter = getObjectFromGUID("718cf9")
+    Gangster = getObjectFromGUID("6b048b")
 
-ExpansionAvatars = ({ --10
-    Odysseus,
-    Administrator,
-    AnimalHandler,
-    Aeneas,
-    SecurityChief,
-    Zoologist,
-    Daedalus,
-    Heracles,
-    Theseus,
-    Veterinarian
-})
+    BaseGameAvatars = ({ --10
+        Medic,
+        Priest,
+        Gunner,
+        Technician,
+        Commander,
+        Researcher,
+        Synthetic,
+        Executive,
+        Scout,
+        Mercenary,
+    })
 
-CovenantAvatars = ({ --5
-    Terraformist,
-    Biologist,
-    Navigator,
-    Pilot,
-    CommunicationsOfficer,
-})
+    ExpansionAvatars = ({ --10
+        Odysseus,
+        Administrator,
+        AnimalHandler,
+        Aeneas,
+        SecurityChief,
+        Zoologist,
+        Daedalus,
+        Heracles,
+        Theseus,
+        Veterinarian
+    })
 
-PredatorAvatars = ({ --5
-    Guerrilla,
-    Tracker,
-    Radioman,
-    CIAAgent,
-    Lieutenant
-})
+    CovenantAvatars = ({ --5
+        Terraformist,
+        Biologist,
+        Navigator,
+        Pilot,
+        CommunicationsOfficer,
+    })
 
-Predator2Avatars = ({ --5
-    Detective,
-    SwatOfficer,
-    OWLFAgent,
-    Reporter,
-    Gangster
-})
+    PredatorAvatars = ({ --5
+        Guerrilla,
+        Tracker,
+        Radioman,
+        CIAAgent,
+        Lieutenant
+    })
 
-        --BARRACKS--
-Dallas = getObjectFromGUID("410aba")
-Brett = getObjectFromGUID("d42558")
-Kane = getObjectFromGUID("1da384")
-Lambert = getObjectFromGUID("258fe5")
-WarrantOfficerRipley = getObjectFromGUID("4bab36")
-Parker = getObjectFromGUID("16e03e")
-LieutenantRipley = getObjectFromGUID("7ea499")
-Hudson = getObjectFromGUID("9e391f")
-Hicks = getObjectFromGUID("b2a269")
-Bishop = getObjectFromGUID("c98e52")
-Gorman = getObjectFromGUID("bf06b6")
-Drake = getObjectFromGUID("a288fc")
-Dillon = getObjectFromGUID("23d34b")
-Clemens = getObjectFromGUID("5fcd4b")
-Aaron = getObjectFromGUID("90816e")
-SisterRipley = getObjectFromGUID("896651")
-Morse = getObjectFromGUID("c517cb")
-Andrews = getObjectFromGUID("56eccf")
-EllenRipley = getObjectFromGUID("3206c4")
-RipleyNo8 = getObjectFromGUID("c1e175")
-Christie = getObjectFromGUID("71831a")
-Johner = getObjectFromGUID("604283")
-Vriess = getObjectFromGUID("7eb6a9")
-Elgyn = getObjectFromGUID("edf276")
-Call = getObjectFromGUID("1da053")
-Tennessee = getObjectFromGUID("9a07ac")
-Oram = getObjectFromGUID("6d1fc6")
-Lope = getObjectFromGUID("1247ca")
-Walter1 = getObjectFromGUID("16feb5")
-Daniels = getObjectFromGUID("22d8d8")
-Karine = getObjectFromGUID("9181c3")
---predator
-Blain = getObjectFromGUID("0f18db")
-Dillon = getObjectFromGUID("8d1d44")
-Dutch = getObjectFromGUID("34f378")
-Mac = getObjectFromGUID("702c9a")
---Predator 2
-Harrigan = getObjectFromGUID("0c1ed5")
-Danny = getObjectFromGUID("7cae9b")
-LambertPred = getObjectFromGUID("3f9313")
-Keyes = getObjectFromGUID("5cf8cd")
+    Predator2Avatars = ({ --5
+        Detective,
+        SwatOfficer,
+        OWLFAgent,
+        Reporter,
+        Gangster
+    })
 
-Movie1Barracks = ({
-    WarrantOfficerRipley,
-    Parker,
-    Dallas,
-    Lambert
-})
-
-Movie2Barracks = ({
-    LieutenantRipley,
-    Hicks,
-    Hudson,
-    Bishop
-})
-
-Movie3Barracks = ({
-    SisterRipley,
-    Dillon,
-    Clemens,
-    Aaron
-})
-
-Movie4Barracks = ({
-    RipleyNo8,
-    Call,
-    Johner,
-    Christie
-})
-
-Movie7Barracks = ({
-    Daniels,
-    Oram,
-    Walter1,
-    Karine
-})
-
-Movie8Barracks = ({
+            --BARRACKS--
+    Dallas = getObjectFromGUID("410aba")
+    Brett = getObjectFromGUID("d42558")
+    Kane = getObjectFromGUID("1da384")
+    Lambert = getObjectFromGUID("258fe5")
+    WarrantOfficerRipley = getObjectFromGUID("4bab36")
+    Parker = getObjectFromGUID("16e03e")
+    LieutenantRipley = getObjectFromGUID("7ea499")
+    Hudson = getObjectFromGUID("9e391f")
+    Hicks = getObjectFromGUID("b2a269")
+    Bishop = getObjectFromGUID("c98e52")
+    Gorman = getObjectFromGUID("bf06b6")
+    Drake = getObjectFromGUID("a288fc")
+    BrotherDillon = getObjectFromGUID("23d34b")
+    Clemens = getObjectFromGUID("5fcd4b")
+    Aaron = getObjectFromGUID("90816e")
+    SisterRipley = getObjectFromGUID("896651")
+    Morse = getObjectFromGUID("c517cb")
+    Andrews = getObjectFromGUID("56eccf")
+    EllenRipley = getObjectFromGUID("3206c4")
+    RipleyNo8 = getObjectFromGUID("c1e175")
+    Christie = getObjectFromGUID("71831a")
+    Johner = getObjectFromGUID("604283")
+    Vriess = getObjectFromGUID("7eb6a9")
+    Elgyn = getObjectFromGUID("edf276")
+    Call = getObjectFromGUID("1da053")
+    Tennessee = getObjectFromGUID("9a07ac")
+    Oram = getObjectFromGUID("6d1fc6")
+    Lope = getObjectFromGUID("1247ca")
+    Walter1 = getObjectFromGUID("16feb5")
+    Daniels = getObjectFromGUID("22d8d8")
+    Karine = getObjectFromGUID("9181c3")
     --predator
-    Blain,
-    Dillon,
-    Dutch,
-    Mac,
-})
+    Blain = getObjectFromGUID("0f18db")
+    Dillon = getObjectFromGUID("8d1d44")
+    Dutch = getObjectFromGUID("34f378")
+    Mac = getObjectFromGUID("702c9a")
+    --Predator 2
+    Harrigan = getObjectFromGUID("0c1ed5")
+    Danny = getObjectFromGUID("7cae9b")
+    LambertPred = getObjectFromGUID("3f9313")
+    Keyes = getObjectFromGUID("5cf8cd")
 
-Movie9Barracks = ({
-    Harrigan,
-    Danny,
-    LambertPred,
-    Keyes
-})
-
-BaseBarracks = ({
-    WarrantOfficerRipley,
-    Parker,
-    Dallas,
-    Lambert,
-    LieutenantRipley,
-    Hicks,
-    Hudson,
-    Bishop,
-    SisterRipley,
-    Dillon,
-    Clemens,
-    Aaron,
-    RipleyNo8,
-    Call,
-    Johner,
-    Christie
-})
-
-ExpansionBarracks = ({
-    Brett,
-    Kane,
-    Gorman,
-    Drake,
-    Morse,
-    Andrews,
-    EllenRipley,
-    Vriess,
-    Elgyn
-})
-
-CovenantBarracks = ({
-    Daniels,
-    Oram,
-    Walter1,
-    Karine,
-    Lope,
-    Tennessee
-})
-
-PredatorBarracks = ({
-    Blain,
-    Dillon,
-    Dutch,
-    Mac,
-    Harrigan,
-    Danny,
-    LambertPred,
-    Keyes
-})
-
-AllBarracks = ({
-    Dallas,
-    Brett,
-    Kane,
-    Lambert,
-    WarrantOfficerRipley,
-    Parker,
-    LieutenantRipley,
-    Hudson,
-    Hicks,
-    Bishop,
-    Gorman,
-    Drake,
-    Dillon,
-    Clemens,
-    Aaron,
-    SisterRipley,
-    Morse,
-    Andrews,
-    EllenRipley,
-    RipleyNo8,
-    Christie,
-    Johner,
-    Vriess,
-    Elgyn,
-    Call,
-    Tennessee,
-    Oram,
-    Lope,
-    Walter1,
-    Daniels,
-    Karine,
-    Blain,
-    Dillon,
-    Dutch,
-    Mac,
-    Harrigan,
-    Danny,
-    LambertPred,
-    Keyes
-})
-
-MovieBarracks = ({
-    Movie1Barracks,
-    Movie2Barracks,
-    Movie3Barracks,
-    Movie4Barracks,
-    AllBarracks,
-    AllBarracks,
-    Movie7Barracks,
-    Movie8Barracks,
-    Movie9Barracks,
-    CovenantBarracks,
-    AllBarracks
-})
-
-        --PLAYERS--
---Red player
-RedArea = getObjectFromGUID("5ec6b4")
-RedPlayButton = getObjectFromGUID("e3f807")
-RedDrawPile = getObjectFromGUID("2ce358")
-RedDiscard = getObjectFromGUID("5a06b1")
-RedPlayZone = getObjectFromGUID("a33f75")
-RedHandZone = getObjectFromGUID("ee57c6")
-RedAvatarZone = getObjectFromGUID("26bb65")
-RedStrikeZone = getObjectFromGUID("d6c332")
-RedPredatorStarter = getObjectFromGUID("98ba83")
-RedAlienStarter = getObjectFromGUID("2ab6c4")
-RedPlayer = ({
-    avatarZone = RedAvatarZone,
-    drawZone = RedDrawPile,
-    handZone = RedHandZone,
-    discardZone = RedDiscard,
-    pcolor = "Red",
-    playZone = RedPlayZone,
-    strikeZone = RedStrikeZone})
-
-RedDiscard.createButton({
-    click_function = "RedPlayerDrawsSix",
-    function_owner = Global,
-    label          = "End Turn",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
+    Movie1Barracks = ({
+        WarrantOfficerRipley,
+        Parker,
+        Dallas,
+        Lambert
     })
-RedAvatarZone.createButton({
-    click_function = "RedPlayerDrawsOne",
-    function_owner = Global,
-    label          = "Draw 1",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
+
+    Movie2Barracks = ({
+        LieutenantRipley,
+        Hicks,
+        Hudson,
+        Bishop
     })
-RedDrawPile.createButton({
-    click_function = "RedPlayerPlaysHand",
-    function_owner = Global,
-    label          = "Play",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
---end Red player
 
---Purple player
-PurpleArea = getObjectFromGUID("40d004")
-PurpleDrawPile = getObjectFromGUID("a8b7dd")
-PurpleDiscard = getObjectFromGUID("6e87d8")
-PurplePlayZone = getObjectFromGUID("2b989e")
-PurpleHandZone = getObjectFromGUID("e4fb0d")
-PurpleAvatarZone = getObjectFromGUID("6187f0")
-PurpleStrikeZone = getObjectFromGUID("dcd993")
-PurplePredatorStarter = getObjectFromGUID("3347ba")
-PurpleAlienStarter = getObjectFromGUID("870440")
-PurplePlayer = ({
-    avatarZone = PurpleAvatarZone,
-    drawZone = PurpleDrawPile,
-    handZone = PurpleHandZone,
-    discardZone = PurpleDiscard,
-    pcolor = "Purple",
-    playZone = PurplePlayZone,
-    strikeZone = PurpleStrikeZone})
+    Movie3Barracks = ({
+        SisterRipley,
+        BrotherDillon,
+        Clemens,
+        Aaron
+    })
 
-PurpleDiscard.createButton({
-    click_function = "PurplePlayerDrawsSix",
-    function_owner = Global,
-    label          = "End Turn",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
-PurpleAvatarZone.createButton({
-    click_function = "PurplePlayerDrawsOne",
-    function_owner = Global,
-    label          = "Draw 1",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
-PurpleDrawPile.createButton({
-    click_function = "PurplePlayerPlaysHand",
-    function_owner = Global,
-    label          = "Play",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
---end PurplePlayer
+    Movie4Barracks = ({
+        RipleyNo8,
+        Call,
+        Johner,
+        Christie
+    })
 
---Green player
-GreenArea = getObjectFromGUID("2edc05")
-GreenDrawPile = getObjectFromGUID("d27b12")
-GreenDiscard = getObjectFromGUID("241c1c")
-GreenPlayZone = getObjectFromGUID("d9466e")
-GreenHandZone = getObjectFromGUID("17e829")
-GreenAvatarZone = getObjectFromGUID("6cf60f")
-GreenStrikeZone = getObjectFromGUID("b67b61")
-GreenPredatorStarter = getObjectFromGUID("3014dc")
-GreenAlienStarter = getObjectFromGUID("af0fc2")
-GreenPlayer = ({
-    avatarZone = GreenAvatarZone,
-    drawZone = GreenDrawPile,
-    handZone = GreenHandZone,
-    discardZone = GreenDiscard,
-    pcolor = "Green",
-    playZone = GreenPlayZone,
-    strikeZone = GreenStrikeZone})
+    Movie7Barracks = ({
+        Daniels,
+        Oram,
+        Walter1,
+        Karine
+    })
 
-GreenDiscard.createButton({
-    click_function = "GreenPlayerDrawsSix",
-    function_owner = Global,
-    label          = "End Turn",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
-GreenAvatarZone.createButton({
-    click_function = "GreenPlayerDrawsOne",
-    function_owner = Global,
-    label          = "Draw 1",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
-GreenDrawPile.createButton({
-    click_function = "GreenPlayerPlaysHand",
-    function_owner = Global,
-    label          = "Play",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
---end Green player
+    Movie8Barracks = ({
+        --predator
+        Blain,
+        Dillon,
+        Dutch,
+        Mac,
+    })
 
---White player
-WhiteArea = getObjectFromGUID("fa92b2")
-WhiteDrawPile = getObjectFromGUID("ccc6c0")
-WhiteDiscard = getObjectFromGUID("8efb45")
-WhitePlayZone = getObjectFromGUID("3b4b08")
-WhiteHandZone = getObjectFromGUID("187d26")
-WhiteAvatarZone = getObjectFromGUID("f037ce")
-WhiteStrikeZone = getObjectFromGUID("5c2695")
-WhitePredatorStarter = getObjectFromGUID("a38629")
-WhiteAlienStarter = getObjectFromGUID("a6b078")
+    Movie9Barracks = ({
+        Harrigan,
+        Danny,
+        LambertPred,
+        Keyes
+    })
 
-WhitePlayer = ({
-    avatarZone = WhiteAvatarZone,
-    drawZone = WhiteDrawPile,
-    handZone = WhiteHandZone,
-    discardZone = WhiteDiscard,
-    pcolor = "White",
-    playZone = WhitePlayZone,
-    strikeZone = WhiteStrikeZone})
+    BaseBarracks = ({
+        WarrantOfficerRipley,
+        Parker,
+        Dallas,
+        Lambert,
+        LieutenantRipley,
+        Hicks,
+        Hudson,
+        Bishop,
+        SisterRipley,
+        BrotherDillon,
+        Clemens,
+        Aaron,
+        RipleyNo8,
+        Call,
+        Johner,
+        Christie
+    })
 
-WhiteDiscard.createButton({
-    click_function = "WhitePlayerDrawsSix",
-    function_owner = Global,
-    label          = "End Turn",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
-WhiteAvatarZone.createButton({
-    click_function = "WhitePlayerDrawsOne",
-    function_owner = Global,
-    label          = "Draw 1",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
-WhiteDrawPile.createButton({
-    click_function = "WhitePlayerPlaysHand",
-    function_owner = Global,
-    label          = "Play",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
---end WhitePlayer
+    ExpansionBarracks = ({
+        Brett,
+        Kane,
+        Gorman,
+        Drake,
+        Morse,
+        Andrews,
+        EllenRipley,
+        Vriess,
+        Elgyn
+    })
 
---Blue player
-BlueArea = getObjectFromGUID("052c72")
-BlueDrawSix = getObjectFromGUID("5d2045")
-BlueDrawOne = getObjectFromGUID("ce7e23")
-BluePlayButton = getObjectFromGUID("09f052")
-BlueDrawPile = getObjectFromGUID("ea62e6")
-BlueDiscard = getObjectFromGUID("12faf9")
-BluePlayZone = getObjectFromGUID("9d096d")
-BlueHandZone = getObjectFromGUID("fe65d3")
-BlueAvatarZone = getObjectFromGUID("c3ca21")
-BlueStrikeZone = getObjectFromGUID("c81585")
-BluePredatorStarter = getObjectFromGUID("c0cbc8")
-BlueAlienStarter = getObjectFromGUID("17e6db")
+    CovenantBarracks = ({
+        Daniels,
+        Oram,
+        Walter1,
+        Karine,
+        Lope,
+        Tennessee
+    })
 
-BluePlayer = ({
-    avatarZone = BlueAvatarZone,
-    drawZone = BlueDrawPile,
-    handZone = BlueHandZone,
-    discardZone = BlueDiscard,
-    pcolor = "Blue",
-    playZone = BluePlayZone,
-    strikeZone = BlueStrikeZone})
+    PredatorBarracks = ({
+        Blain,
+        Dillon,
+        Dutch,
+        Mac,
+        Harrigan,
+        Danny,
+        LambertPred,
+        Keyes
+    })
 
-BlueDiscard.createButton({
-    click_function = "BluePlayerDrawsSix",
-    function_owner = Global,
-    label          = "End Turn",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
-BlueAvatarZone.createButton({
-    click_function = "BluePlayerDrawsOne",
-    function_owner = Global,
-    label          = "Draw 1",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
-BlueDrawPile.createButton({
-    click_function = "BluePlayerPlaysHand",
-    function_owner = Global,
-    label          = "Play",
-    position       = {0, -.4, -.93},
-    rotation       = {0,180,0},
-    width          = 500,
-    height         = 100,
-    font_size      = 80,
-    color          = {0, 0, 0},
-    font_color     = {1, 1, 1},
-})
---end Blue player
+    AllBarracks = ({
+        Dallas,
+        Brett,
+        Kane,
+        Lambert,
+        WarrantOfficerRipley,
+        Parker,
+        LieutenantRipley,
+        Hudson,
+        Hicks,
+        Bishop,
+        Gorman,
+        Drake,
+        BrotherDillon,
+        Clemens,
+        Aaron,
+        SisterRipley,
+        Morse,
+        Andrews,
+        EllenRipley,
+        RipleyNo8,
+        Christie,
+        Johner,
+        Vriess,
+        Elgyn,
+        Call,
+        Tennessee,
+        Oram,
+        Lope,
+        Walter1,
+        Daniels,
+        Karine,
+        Blain,
+        Dillon,
+        Dutch,
+        Mac,
+        Harrigan,
+        Danny,
+        LambertPred,
+        Keyes
+    })
 
+    MovieBarracks = ({
+        Movie1Barracks,
+        Movie2Barracks,
+        Movie3Barracks,
+        Movie4Barracks,
+        AllBarracks,
+        AllBarracks,
+        Movie7Barracks,
+        Movie8Barracks,
+        Movie9Barracks,
+        CovenantBarracks,
+        AllBarracks
+    })
+
+            --PLAYERS--
+    --Red player
+    RedArea = getObjectFromGUID("5ec6b4")
+    RedPlayButton = getObjectFromGUID("e3f807")
+    RedDrawPile = getObjectFromGUID("2ce358")
+    RedDiscard = getObjectFromGUID("5a06b1")
+    RedPlayZone = getObjectFromGUID("a33f75")
+    RedHandZone = getObjectFromGUID("ee57c6")
+    RedAvatarZone = getObjectFromGUID("26bb65")
+    RedStrikeZone = getObjectFromGUID("d6c332")
+    RedPredatorStarter = getObjectFromGUID("98ba83")
+    RedAlienStarter = getObjectFromGUID("67da5e")
+    RedPlayer = ({
+        avatarZone = RedAvatarZone,
+        drawZone = RedDrawPile,
+        handZone = RedHandZone,
+        discardZone = RedDiscard,
+        pcolor = "Red",
+        playZone = RedPlayZone,
+        strikeZone = RedStrikeZone})
+
+    RedDiscard.createButton({
+        click_function = "RedPlayerDrawsSix",
+        function_owner = Global,
+        label          = "End Turn",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+        })
+    RedAvatarZone.createButton({
+        click_function = "RedPlayerDrawsOne",
+        function_owner = Global,
+        label          = "Draw 1",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+        })
+    RedDrawPile.createButton({
+        click_function = "RedPlayerPlaysHand",
+        function_owner = Global,
+        label          = "Play",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    --end Red player
+
+    --Purple player
+    PurpleArea = getObjectFromGUID("40d004")
+    PurpleDrawPile = getObjectFromGUID("a8b7dd")
+    PurpleDiscard = getObjectFromGUID("6e87d8")
+    PurplePlayZone = getObjectFromGUID("2b989e")
+    PurpleHandZone = getObjectFromGUID("e4fb0d")
+    PurpleAvatarZone = getObjectFromGUID("6187f0")
+    PurpleStrikeZone = getObjectFromGUID("dcd993")
+    PurplePredatorStarter = getObjectFromGUID("954cfd")
+    PurpleAlienStarter = getObjectFromGUID("a5c664")
+    PurplePlayer = ({
+        avatarZone = PurpleAvatarZone,
+        drawZone = PurpleDrawPile,
+        handZone = PurpleHandZone,
+        discardZone = PurpleDiscard,
+        pcolor = "Purple",
+        playZone = PurplePlayZone,
+        strikeZone = PurpleStrikeZone})
+
+    PurpleDiscard.createButton({
+        click_function = "PurplePlayerDrawsSix",
+        function_owner = Global,
+        label          = "End Turn",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    PurpleAvatarZone.createButton({
+        click_function = "PurplePlayerDrawsOne",
+        function_owner = Global,
+        label          = "Draw 1",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    PurpleDrawPile.createButton({
+        click_function = "PurplePlayerPlaysHand",
+        function_owner = Global,
+        label          = "Play",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    --end PurplePlayer
+
+    --Green player
+    GreenArea = getObjectFromGUID("2edc05")
+    GreenDrawPile = getObjectFromGUID("d27b12")
+    GreenDiscard = getObjectFromGUID("241c1c")
+    GreenPlayZone = getObjectFromGUID("d9466e")
+    GreenHandZone = getObjectFromGUID("17e829")
+    GreenAvatarZone = getObjectFromGUID("6cf60f")
+    GreenStrikeZone = getObjectFromGUID("b67b61")
+    GreenPredatorStarter = getObjectFromGUID("b87968")
+    GreenAlienStarter = getObjectFromGUID("c45082")
+    GreenPlayer = ({
+        avatarZone = GreenAvatarZone,
+        drawZone = GreenDrawPile,
+        handZone = GreenHandZone,
+        discardZone = GreenDiscard,
+        pcolor = "Green",
+        playZone = GreenPlayZone,
+        strikeZone = GreenStrikeZone})
+
+    GreenDiscard.createButton({
+        click_function = "GreenPlayerDrawsSix",
+        function_owner = Global,
+        label          = "End Turn",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    GreenAvatarZone.createButton({
+        click_function = "GreenPlayerDrawsOne",
+        function_owner = Global,
+        label          = "Draw 1",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    GreenDrawPile.createButton({
+        click_function = "GreenPlayerPlaysHand",
+        function_owner = Global,
+        label          = "Play",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    --end Green player
+
+    --White player
+    WhiteArea = getObjectFromGUID("fa92b2")
+    WhiteDrawPile = getObjectFromGUID("ccc6c0")
+    WhiteDiscard = getObjectFromGUID("8efb45")
+    WhitePlayZone = getObjectFromGUID("3b4b08")
+    WhiteHandZone = getObjectFromGUID("187d26")
+    WhiteAvatarZone = getObjectFromGUID("f037ce")
+    WhiteStrikeZone = getObjectFromGUID("5c2695")
+    WhitePredatorStarter = getObjectFromGUID("54982b")
+    WhiteAlienStarter = getObjectFromGUID("6ebd54")
+
+    WhitePlayer = ({
+        avatarZone = WhiteAvatarZone,
+        drawZone = WhiteDrawPile,
+        handZone = WhiteHandZone,
+        discardZone = WhiteDiscard,
+        pcolor = "White",
+        playZone = WhitePlayZone,
+        strikeZone = WhiteStrikeZone})
+
+    WhiteDiscard.createButton({
+        click_function = "WhitePlayerDrawsSix",
+        function_owner = Global,
+        label          = "End Turn",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    WhiteAvatarZone.createButton({
+        click_function = "WhitePlayerDrawsOne",
+        function_owner = Global,
+        label          = "Draw 1",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    WhiteDrawPile.createButton({
+        click_function = "WhitePlayerPlaysHand",
+        function_owner = Global,
+        label          = "Play",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    --end WhitePlayer
+
+    --Blue player
+    BlueArea = getObjectFromGUID("052c72")
+    BlueDrawSix = getObjectFromGUID("5d2045")
+    BlueDrawOne = getObjectFromGUID("ce7e23")
+    BluePlayButton = getObjectFromGUID("09f052")
+    BlueDrawPile = getObjectFromGUID("ea62e6")
+    BlueDiscard = getObjectFromGUID("12faf9")
+    BluePlayZone = getObjectFromGUID("9d096d")
+    BlueHandZone = getObjectFromGUID("fe65d3")
+    BlueAvatarZone = getObjectFromGUID("c3ca21")
+    BlueStrikeZone = getObjectFromGUID("c81585")
+    BluePredatorStarter = getObjectFromGUID("8290cd")
+    BlueAlienStarter = getObjectFromGUID("ba44fa")
+
+    BluePlayer = ({
+        avatarZone = BlueAvatarZone,
+        drawZone = BlueDrawPile,
+        handZone = BlueHandZone,
+        discardZone = BlueDiscard,
+        pcolor = "Blue",
+        playZone = BluePlayZone,
+        strikeZone = BlueStrikeZone})
+
+    BlueDiscard.createButton({
+        click_function = "BluePlayerDrawsSix",
+        function_owner = Global,
+        label          = "End Turn",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    BlueAvatarZone.createButton({
+        click_function = "BluePlayerDrawsOne",
+        function_owner = Global,
+        label          = "Draw 1",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    BlueDrawPile.createButton({
+        click_function = "BluePlayerPlaysHand",
+        function_owner = Global,
+        label          = "Play",
+        position       = {0, -.4, -.93},
+        rotation       = {0,180,0},
+        width          = 500,
+        height         = 100,
+        font_size      = 80,
+        color          = {0, 0, 0},
+        font_color     = {1, 1, 1},
+    })
+    --end Blue player
 end
 
         --FUNCTIONS--
@@ -1261,7 +1264,7 @@ function DealAvatar(player, number, avatars)
 end
 
 --get the player given their color
-function GetPlayer(pColor)
+function GetPlayerObject(pColor)
     if (pColor == "Red") then
         return RedPlayer
     elseif (pColor == "Purple") then
@@ -1526,6 +1529,7 @@ function StartGame()
 
     Wait.frames(function() SetupMovie(movie, barracks) end, 500)
     CreatePlayers()
+
 end
 
 function CreatePlayers()
@@ -1535,7 +1539,7 @@ function CreatePlayers()
         for j = 1, 5 do
             if possiblePlayers[j] == v then
                 table.insert(Players, i, v)
-                Wait.frames(function() DrawSix(GetPlayer(v)) end, 350)
+                Wait.frames(function() DrawSix(GetPlayerObject(v)) end, 350)
             end
         end
     end
@@ -1848,7 +1852,7 @@ function SetupAvatars()
         end
         taken = true
         table.insert(alreadyChosen, 1, number)
-        DealAvatar(GetPlayer(v), number, avatars)
+        DealAvatar(GetPlayerObject(v), number, avatars)
     end
 end
 
@@ -1985,19 +1989,19 @@ function RemoveBluePlayer()
 end
 
 function BuyHQ1(obj, playerColor, click)
-    BuyFromHQ(GetPlayer(playerColor), HQ1)
+    BuyFromHQ(GetPlayerObject(playerColor), HQ1)
 end
 function BuyHQ2(obj, playerColor, click)
-    BuyFromHQ(GetPlayer(playerColor), HQ2)
+    BuyFromHQ(GetPlayerObject(playerColor), HQ2)
 end
 function BuyHQ3(obj, playerColor, click)
-    BuyFromHQ(GetPlayer(playerColor), HQ3)
+    BuyFromHQ(GetPlayerObject(playerColor), HQ3)
 end
 function BuyHQ4(obj, playerColor, click)
-    BuyFromHQ(GetPlayer(playerColor), HQ4)
+    BuyFromHQ(GetPlayerObject(playerColor), HQ4)
 end
 function BuyHQ5(obj, playerColor, click)
-    BuyFromHQ(GetPlayer(playerColor), HQ5)
+    BuyFromHQ(GetPlayerObject(playerColor), HQ5)
 end
 
 function BuyFromHQ(player, hq)
@@ -2023,7 +2027,7 @@ function BuyFromHQ(player, hq)
 end
 
 function BuySergeant(obj, playerColor, click)
-    local player = GetPlayer(playerColor)
+    local player = GetPlayerObject(playerColor)
     for i, v in pairs(SergeantDeck.getObjects()) do
         if v.tag == 'Deck' then
             local card = v.takeObject()
@@ -2085,25 +2089,25 @@ function ScanComplex(comp, playerColor)
     Wait.frames(function()
         if card ~= nil then
             if card.getDescription() ~= '' then
-                CheckCard(card, "Complex")
+                CheckCard(card, "Complex", comp)
             end
         end
     end, 200)
 end
 
-function CheckCard(card, area)
-    CheckObjectives(card)
+function CheckCard(card, area, zoneNumber)
+    CheckObjectives(card, area, zoneNumber)
     if card.getDescription() == "Hazard" then
         CheckHazards(card, area)
     end
     if card.getDescription() == "Event" then
-        CheckEvents(card)
+        CheckEvents(card, zoneNumber)
     else
         if card.getDescription() == "Jonesy" then
             if area == "Complex" then
                 broadcastToAll("You found Jonesy! " .. GetCurrentPlayer() .. " chooses who will keep him!", GetCurrentPlayer())
                 Wait.frames(function()
-                    card.setPositionSmooth(GetPlayer(GetCurrentPlayer()).playZone.getPosition(), false, false)
+                    card.setPositionSmooth(GetPlayerObject(GetCurrentPlayer()).playZone.getPosition(), false, false)
                 end, 100)
             else
                 Wait.frames(function()
@@ -2115,7 +2119,7 @@ function CheckCard(card, area)
     end
 end
 
-function CheckObjectives(card)
+function CheckObjectives(card, area, zoneNumber)
     local description = card.getDescription()
     if description == "SOS" then
         if SOSPartFound == false then
@@ -2172,6 +2176,18 @@ function CheckObjectives(card)
         card.setPosition(ComplexTop1.getPosition())
         broadcastToAll("Airlock Controls found! Pay 3 to move an enemy to the Airlock.", {r=1, g=1, b=1})
     end
+    if description == "Colonist" then
+        local zone
+        local clickFunction
+        if area == "CombatZone" then
+            zone = CombatZones[zoneNumber]
+            clickFunction = ColonistCombatZones[zoneNumber]
+        else
+            zone = Complexes[zoneNumber]
+            clickFunction = ColonistComplexes[zoneNumber]
+        end
+        zone.editButton({label = "Kill", click_function = clickFunction})
+    end
 end
 
 function CheckHazards(card, area)
@@ -2201,14 +2217,15 @@ function CheckHazards(card, area)
                     topCard = v
                 end
             end
+            local zone
             if topCard ~= nil then
                 topCard.flip()
                 Wait.frames(function()
-                    RotateCombatZone(topCard)
+                    zone = RotateCombatZone(topCard)
                 end, 100)
                 Wait.frames(function()
                     if topCard.getDescription() ~= nil then
-                        CheckCard(topCard, "CombatZone")
+                        CheckCard(topCard, "CombatZone", zone)
                     end
                 end, 200)
             end
@@ -2227,6 +2244,113 @@ function CheckHazards(card, area)
                 broadcastToAll("Third Hazard found, pay 8 to disarm self-destruct before reaching Combat Zone", {0.129, 0.694, 0.607})
             end
         end
+    elseif index == 2 then
+        if HazardCount == 1 then
+            broadcastToAll("First Hazard found, every other player discards all attack cards.", {0.129, 0.694, 0.607})
+            local currentPlayer = GetCurrentPlayer()
+            for i,v in pairs(Players) do
+                if v ~= currentPlayer then
+                    local player = GetPlayerObject(v)
+                    for j,k in pairs(player.handZone.getObjects()) do
+                        if k.type == 'Card' then
+                            local attackCard = IsCardAttack(k)
+                            if attackCard == true then
+                                k.setPosition(player.discardZone.getPosition())
+                            end
+                        end
+                    end
+                end
+            end
+        elseif HazardCount == 2 then
+            broadcastToAll("Second Hazard found, Complex is now full and randomized.", {0.129, 0.694, 0.607})
+            card.setPosition(DiscardedHazards.getPosition())
+            for i,v in pairs(Complexes[1].getObjects()) do
+                if v.type == 'Card' then
+                    if v.getRotation().z < 1 then
+                        if v.getDescription() ~= "Hazard" then
+                            v.flip()
+                        end
+                    end
+                end
+            end
+            Wait.frames(function()
+                for i=2, ComplexSize do
+                    for j, v in pairs(Complexes[i].getObjects()) do
+                        if v.type == 'Card' then
+                            if v.getRotation().z < 1 then
+                                v.flip()
+                            end
+                            v.setPosition(Complexes[1].getPosition())
+                        end
+                    end
+                end
+            end, 20)
+
+            local deck = nil
+            Wait.frames(function()
+                for i,v in pairs(Complexes[1].getObjects()) do
+                    if v.type == 'Deck' then
+                        deck = v
+                    end
+                end
+            end, 150)
+
+            Wait.frames(function()
+                local count
+                if deck ~= nil then
+                    count = #deck.getObjects()
+                else
+                    count = 0
+                end
+                local hiveDeck
+                for i,v in pairs(Hive.getObjects()) do
+                    if v.type == "Deck" then
+                        hiveDeck = v
+                    end
+                end
+                if (count < ComplexSize) then
+                    for i = count, ComplexSize - 1 do
+                        hiveDeck.takeObject().setPosition(Complexes[1].getPosition())
+                    end
+                end
+            end, 151)
+            Wait.frames(function()
+                for i,v in pairs(Complexes[1].getObjects()) do
+                    if v.type == 'Deck' then
+                        deck = v
+                    end
+                end
+                deck.shuffle()
+            end, 270)
+            Wait.frames(function()
+                for i=2, ComplexSize do
+                    deck.takeObject().setPosition(Complexes[i].getPosition())
+                end
+            end, 271)
+        elseif HazardCount >= 3 then
+            broadcastToAll("Third Hazard found, ." .. GetCurrentPlayer() .. "'s Avatar taken prisoner! Pay 6 Recruit to free them!", {0.129, 0.694, 0.607})
+            local player = GetPlayerObject(GetCurrentPlayer())
+            -- local avatar
+            for i,v in pairs(player.avatarZone.getObjects()) do
+                if v.type == "Card" then
+                    v.setPosition(Operations2.getPosition())
+                    PrisonedAvatarPlayer = GetCurrentPlayer()
+                end
+            end
+
+            Operations2.createButton({
+                click_function = "FreeAvatar",
+                function_owner = Global,
+                label          = "Pay 6",
+                position       = {0, -.4, -.7},
+                rotation       = {0,180,0},
+                width          = 500,
+                height         = 100,
+                font_size      = 80,
+                color          = {0, 0, 0},
+                font_color     = {1, 1, 1},
+            })
+        end
     end
 
     if throwAwayHazard == true then
@@ -2236,7 +2360,7 @@ function CheckHazards(card, area)
      end
 end
 
-function CheckEvents(card)
+function CheckEvents(card, zoneNumber)
     local sendToDiscard = true
     local objective = GetCurrentObjective()
     if objective.guid == SOSCard then
@@ -2256,13 +2380,13 @@ function CheckEvents(card)
             if moved == false then
                 for j,v in pairs(Complexes[i].getObjects()) do
                     if v.type == 'Card' then
-                        RotateCombatZone(v)
+                        zoneNumber = RotateCombatZone(v)
                         if v.getRotation().z > 1 then
                             v.flip()
                         end
                         if v.getDescription() ~= '' then
                             Wait.frames(function()
-                                CheckCard(v, "CombatZone")
+                                CheckCard(v, "CombatZone", zoneNumber)
                             end,100)
                         end
                         moved = true
@@ -2276,17 +2400,21 @@ function CheckEvents(card)
     for i,v in pairs(PlayZones) do
         for j,k in pairs(v.getObjects()) do
             if k.type == 'Card' then
-                if k.getDescription() == 'Egg' and k.getRotation().z < 1 then
-                    k.setPosition(DeadEnemies.getPosition())
-                    local hatcheryDeck = Hatchery.getObjects()
-                    local faceHugger
-                    if hatcheryDeck[1].type == 'Deck' or hatcheryDeck[1].type == 'Card' then
-                        faceHugger = hatcheryDeck[1].takeObject()
-                    else
-                        faceHugger = hatcheryDeck[2].takeObject()
+                if k.getRotation().z < 1 then
+                    if k.getDescription() == 'Egg' then
+                        k.setPosition(DeadEnemies.getPosition())
+                        local hatcheryDeck = Hatchery.getObjects()
+                        local faceHugger
+                        if hatcheryDeck[1].type == 'Deck' or hatcheryDeck[1].type == 'Card' then
+                            faceHugger = hatcheryDeck[1].takeObject()
+                        else
+                            faceHugger = hatcheryDeck[2].takeObject()
+                        end
+                        faceHugger.setPositionSmooth(GetPlayerObject(GetCurrentPlayer()).playZone.getPosition(), false, false)
+                        broadcastToAll("AN EGG HAS HATCHED AND RELEASED A FACEHUGGER ON " .. GetCurrentPlayer() .. "! YOU HAVE ONE TURN TO KILL IT! \n(return dead facehuggers to hatchery, not to 'Dead Enemies')", {r=1, g=0, b=0})
+                    elseif k.getDescription() == "Colonist" then
+
                     end
-                    faceHugger.setPositionSmooth(GetPlayer(GetCurrentPlayer()).playZone.getPosition(), false, false)
-                    broadcastToAll("AN EGG HAS HATCHED AND RELEASED A FACEHUGGER ON " .. GetCurrentPlayer() .. "! YOU HAVE ONE TURN TO KILL IT! \n(return dead facehuggers to hatchery, not to 'Dead Enemies')", {r=1, g=0, b=0})
                 end
             end
         end
@@ -2310,7 +2438,7 @@ function GetCurrentObjective()
 end
 
 function GainStrike(obj, playerColor, click)
-    local player = GetPlayer(playerColor)
+    local player = GetPlayerObject(playerColor)
     for i, v in pairs(StrikesDeck.getObjects()) do
         if v.tag == 'Deck' then
             local card = v.takeObject()
@@ -2324,7 +2452,7 @@ function GainStrike(obj, playerColor, click)
 end
 
 function DiscardRandomCard(playerColor)
-    local player = GetPlayer(playerColor)
+    local player = GetPlayerObject(playerColor)
     local handZone = player.handZone.getObjects()
     local hand = ({})
     local count = 0
@@ -2338,6 +2466,24 @@ function DiscardRandomCard(playerColor)
     local number = math.random(count)
     if count > 0 then
         hand[number].setPosition(player.discardZone.getPosition())
+    end
+end
+
+function IsCardAttack(card)
+    if card.getDescription() == 'Attack' or card.getDescription() == "AttackMoney" or card.getDescription() == "StarterAttack" then
+        return true
+    end
+    return false
+end
+
+function FreeAvatar()
+    Operations2.removeButton(0)
+    local player = GetPlayerObject(PrisonedAvatarPlayer)
+    local avatar
+    for i,v in pairs(Operations2.getObjects()) do
+        if v.type == 'Card' then
+            v.setPosition(player.avatarZone.getPosition())
+        end
     end
 end
 
@@ -2385,16 +2531,16 @@ function PushComplex(index)
     if emptyIndex == 0 then --no empty slots
         for i, v in pairs(Complex1.getObjects()) do
             if v.type == 'Card' or v.type == 'Deck' then
-                if v.getDescription() == "Egg" and v.getRotation().z < 1 then
+                if (v.getDescription() == "Egg" or v.getDescription() == "Colonist") and v.getRotation().z < 1 then
                     break
                 end
+                local zone = RotateCombatZone(v)
                 if v.getRotation().z > 1 then
                     v.flip()
                 end
                 if v.getDescription() ~= '' then
-                    CheckCard(v, "CombatZone")
+                    CheckCard(v, "CombatZone", zone)
                 end
-                RotateCombatZone(v)
                 emptyIndex = 1
             end
         end
@@ -2403,17 +2549,17 @@ function PushComplex(index)
         for i = 2, index do
             for j, v in pairs(Complexes[i].getObjects()) do
                 if (v.type == 'Card' or v.type == 'Deck') then
-                    if (v.getDescription() == "Egg" and v.getRotation().z < 1) then
+                    if (v.getDescription() == "Egg" or v.getDescription() == "Colonist") and v.getRotation().z < 1 then
                         break
                     else
+                        local zone = RotateCombatZone(v)
                         emptyIndex = i
                         if v.getRotation().z > 1 then
                             v.flip()
                         end
                         if v.getDescription() ~= '' then
-                            CheckCard(v, "CombatZone")
+                            CheckCard(v, "CombatZone", zone)
                         end
-                        RotateCombatZone(v)
                         goto continue
                     end
                 end
@@ -2434,7 +2580,7 @@ function PushComplex(index)
         found = false
         for j, v in pairs(Complexes[emptyIndex + i].getObjects()) do
             if v.type == 'Card' or v.type == 'Deck' then
-                if v.getDescription() == "Egg" and v.getRotation().z < 1 then
+                if (v.getDescription() == "Egg" or v.getDescription() == "Colonist") and v.getRotation().z < 1 then
                     break
                 else
                     v.setPosition(Complexes[(emptyIndex + i) - skip].getPosition())
@@ -2532,7 +2678,7 @@ function RotateCombatZone(card)
     end
     if found == false then
         card.setPositionSmooth(CombatZone1.getPosition(), false, false)
-        return
+        return 1
     end
     found = false
     for i, v in pairs(CombatZone2.getObjects()) do
@@ -2544,7 +2690,7 @@ function RotateCombatZone(card)
     end
     if found == false then
         card.setPositionSmooth(CombatZone2.getPosition(), false, false)
-        return
+        return 2
     end
     found = false
     for i, v in pairs(CombatZone3.getObjects()) do
@@ -2556,9 +2702,10 @@ function RotateCombatZone(card)
     end
     if found == false then
         card.setPositionSmooth(CombatZone3.getPosition(), false, false)
-        return
+        return 3
     else
         card.setPositionSmooth(CombatZone1.getPosition(), false, false)
+        return 1
     end
 end
 
@@ -2792,6 +2939,10 @@ function SetupButtons()
         font_color     = {1, 1, 1},
     })
 end
+
+-- function onObjectEnterScriptingZone(zone, enter_object)
+--   print(enter_object.getName() .. ' has entered zone ' .. zone.getGUID())
+-- end
 
 --[[ The Update function. This is called once per frame. --]]
 function update ()
