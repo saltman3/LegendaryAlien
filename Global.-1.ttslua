@@ -83,7 +83,14 @@ function onload()
     Players = ({})
     CurrentTurn = 0
     ComplexSize = 5
+    ObjectivesCompleted = 0
+    ColonistsKilled = 0
+    NumberOfSentryGuns = 0
+    SentryGun = nil
     PrisonedAvatarPlayer = ""
+    SentryGunsPlaced = 0
+    SentryGunsObjective = false
+    VentilationShaftObjective = false
 
     SOSPartFound = false
     HazardCount = 0
@@ -98,88 +105,18 @@ function onload()
     Movie8Selected = false
     Movie9Selected = false
 
-    MovieSelected = ({
-        Movie1Selected,
-        Movie2Selected,
-        Movie3Selected,
-        Movie4Selected,
-        Movie5Selected,
-        Movie6Selected,
-        Movie7Selected,
-        Movie8Selected,
-        Movie9Selected
-    })
-
-    MovieButtons = ({
-        "Movie1Button",
-        "Movie2Button",
-        "Movie3Button",
-        "Movie4Button",
-        "Movie5Button",
-        "Movie6Button",
-        "Movie7Button",
-        "Movie8Button",
-        "Movie9Button"
-    })
-
-    Sergeants = ({
-        AlienSergeants,
-        PredatorSergeants
-    })
-
-    Strikes = ({
-        AlienStrikeDeck,
-        PredatorStrikeDeck
-    })
-
-    Drones = ({
-        AlienDroneDeck,
-        PredatorDroneDeck
-    })
-
-    Operations = ({
-        Operations1,
-        Operations2
-    })
-
-    Complexes = ({
-        Complex1,
-        Complex2,
-        Complex3,
-        Complex4,
-        Complex5
-    })
-
-    ComplexesTop = ({
-        ComplexTop1,
-        ComplexTop2,
-        ComplexTop3,
-        ComplexTop4,
-        ComplexTop5
-    })
-
-    CombatZones = ({
-        CombatZone1,
-        CombatZone2,
-        CombatZone3
-    })
-
-    PlayZones = ({
-        Complex1,
-        Complex2,
-        Complex3,
-        Complex4,
-        Complex5,
-        ComplexTop1,
-        ComplexTop2,
-        ComplexTop3,
-        ComplexTop4,
-        ComplexTop5,
-        CombatZone1,
-        CombatZone2,
-        CombatZone3
-    })
-
+    MovieSelected = ({ Movie1Selected, Movie2Selected, Movie3Selected, Movie4Selected, Movie5Selected, Movie6Selected, Movie7Selected, Movie8Selected, Movie9Selected})
+    MovieButtons = ({ "Movie1Button", "Movie2Button", "Movie3Button", "Movie4Button", "Movie5Button", "Movie6Button", "Movie7Button", "Movie8Button", "Movie9Button"})
+    Sergeants = ({ AlienSergeants, PredatorSergeants })
+    Strikes = ({ AlienStrikeDeck, PredatorStrikeDeck })
+    Drones = ({ AlienDroneDeck, PredatorDroneDeck })
+    Operations = ({ Operations1, Operations2 })
+    Complexes = ({ Complex1, Complex2, Complex3, Complex4, Complex5 })
+    ComplexesTop = ({ ComplexTop1, ComplexTop2, ComplexTop3, ComplexTop4, ComplexTop5 })
+    CombatZones = ({ CombatZone1, CombatZone2, CombatZone3 })
+    PlayZones = ({ Complex1, Complex2, Complex3, Complex4, Complex5, ComplexTop1, ComplexTop2, ComplexTop3, ComplexTop4, ComplexTop5, CombatZone1, CombatZone2, CombatZone3 })
+    ComplexButtonClickFunctions = ({"ScanComplex1","ScanComplex2","ScanComplex3","ScanComplex4","ScanComplex5"})
+    ComplexButtonLabels = ({"Scan 2", "Scan 2","Scan 3","Scan 3","Scan 4"})
     ColonistComplexes = ({"ColonistComplex1", "ColonistComplex2", "ColonistComplex3", "ColonistComplex4", "ColonistComplex5"})
     ColonistCombatZones = ({"ColonistCombatZone1", "ColonistCombatZone2", "ColonistCombatZone3"})
             --NON INTERACTABLE OBJECTS--
@@ -276,9 +213,12 @@ function onload()
     PerfectOrganism = getObjectFromGUID("dff99f")
     PerfectOrganismCard = "9c164c"
     --movie 2
-    LastColony = getObjectFromGUID("018b01")
+    LostColony = getObjectFromGUID("018b01")
+    LostColonyCard = "cb4705"
     MostlyComeAtNight = getObjectFromGUID("508bb8")
+    MostlyComeAtNightCard = "f78555"
     WhosLayingEggs = getObjectFromGUID("d1fc36")
+    WhosLayingEggsCard = "c3d240"
     --movie 3
     WhereAreTheBrothers = getObjectFromGUID("9e6e4e")
     BeastIsOutThere = getObjectFromGUID("408edd")
@@ -308,65 +248,12 @@ function onload()
     PersonalLittleWar = getObjectFromGUID("25a23d")
     OtherWorldLifeForm = getObjectFromGUID("6bef1e")
 
-    Objectives1 = ({
-        SOS,
-        LastColony,
-        WhereAreTheBrothers,
-        Breakout,
-        StrangeBehavior,
-        Incubators,
-        RogueTransmission,
-        ExpendableAssets,
-        WarZone
-    })
+    Objectives1 = ({SOS,LostColony,WhereAreTheBrothers,Breakout,StrangeBehavior,Incubators,RogueTransmission,ExpendableAssets,WarZone })
+    Objectives2 = ({NoOneCanHearYouScream,MostlyComeAtNight,BeastIsOutThere,YoureAThing,NewResidents,ReleaseTheHounds,DoMakeYourselvesAtHome,FlaresFragsClaymores,PersonalLittleWar })
+    Objectives3 = ({PerfectOrganism,WhosLayingEggs,NobodyCanStopIt,ShellBreed,RulerOfTheRoost,FinalCreation,TheLonelyPerfectionOfMyDream,GetToTheChoppa,OtherWorldLifeForm })
+    Locations = ({Nostromo,HadleysHope,Fury,Auriga,Aviary,Echiona,Planet4,ValVerdeanJungle,LosAngeles })
+    Objectives = ({Movie1Obj,Movie2Obj,Movie3Obj,Movie4Obj,Movie5Obj,Movie6Obj,Movie7Obj,Movie8Obj,Movie9Obj })
 
-    Objectives2 = ({
-        NoOneCanHearYouScream,
-        MostlyComeAtNight,
-        BeastIsOutThere,
-        YoureAThing,
-        NewResidents,
-        ReleaseTheHounds,
-        DoMakeYourselvesAtHome,
-        FlaresFragsClaymores,
-        PersonalLittleWar
-    })
-
-    Objectives3 = ({
-        PerfectOrganism,
-        WhosLayingEggs,
-        NobodyCanStopIt,
-        ShellBreed,
-        RulerOfTheRoost,
-        FinalCreation,
-        TheLonelyPerfectionOfMyDream,
-        GetToTheChoppa,
-        OtherWorldLifeForm
-    })
-
-    Locations = ({
-        Nostromo,
-        HadleysHope,
-        Fury,
-        Auriga,
-        Aviary,
-        Echiona,
-        Planet4,
-        ValVerdeanJungle,
-        LosAngeles
-    })
-
-    Objectives = ({
-        Movie1Obj,
-        Movie2Obj,
-        Movie3Obj,
-        Movie4Obj,
-        Movie5Obj,
-        Movie6Obj,
-        Movie7Obj,
-        Movie8Obj,
-        Movie9Obj
-    })
             --AVATARS--
     --base game
     Medic = getObjectFromGUID("af7cc7")
@@ -409,55 +296,11 @@ function onload()
     Reporter = getObjectFromGUID("718cf9")
     Gangster = getObjectFromGUID("6b048b")
 
-    BaseGameAvatars = ({ --10
-        Medic,
-        Priest,
-        Gunner,
-        Technician,
-        Commander,
-        Researcher,
-        Synthetic,
-        Executive,
-        Scout,
-        Mercenary,
-    })
-
-    ExpansionAvatars = ({ --10
-        Odysseus,
-        Administrator,
-        AnimalHandler,
-        Aeneas,
-        SecurityChief,
-        Zoologist,
-        Daedalus,
-        Heracles,
-        Theseus,
-        Veterinarian
-    })
-
-    CovenantAvatars = ({ --5
-        Terraformist,
-        Biologist,
-        Navigator,
-        Pilot,
-        CommunicationsOfficer,
-    })
-
-    PredatorAvatars = ({ --5
-        Guerrilla,
-        Tracker,
-        Radioman,
-        CIAAgent,
-        Lieutenant
-    })
-
-    Predator2Avatars = ({ --5
-        Detective,
-        SwatOfficer,
-        OWLFAgent,
-        Reporter,
-        Gangster
-    })
+    BaseGameAvatars = ({ Medic, Priest, Gunner, Technician, Commander, Researcher, Synthetic, Executive, Scout, Mercenary,})
+    ExpansionAvatars = ({  Odysseus, Administrator, AnimalHandler, Aeneas, SecurityChief, Zoologist, Daedalus, Heracles, Theseus, Veterinarian})
+    CovenantAvatars = ({ Terraformist, Biologist, Navigator, Pilot, CommunicationsOfficer })
+    PredatorAvatars = ({ Guerrilla, Tracker, Radioman, CIAAgent, Lieutenant })
+    Predator2Avatars = ({ Detective, SwatOfficer, OWLFAgent, Reporter, Gangster })
 
             --BARRACKS--
     Dallas = getObjectFromGUID("410aba")
@@ -502,162 +345,20 @@ function onload()
     LambertPred = getObjectFromGUID("3f9313")
     Keyes = getObjectFromGUID("5cf8cd")
 
-    Movie1Barracks = ({
-        WarrantOfficerRipley,
-        Parker,
-        Dallas,
-        Lambert
-    })
-
-    Movie2Barracks = ({
-        LieutenantRipley,
-        Hicks,
-        Hudson,
-        Bishop
-    })
-
-    Movie3Barracks = ({
-        SisterRipley,
-        BrotherDillon,
-        Clemens,
-        Aaron
-    })
-
-    Movie4Barracks = ({
-        RipleyNo8,
-        Call,
-        Johner,
-        Christie
-    })
-
-    Movie7Barracks = ({
-        Daniels,
-        Oram,
-        Walter1,
-        Karine
-    })
-
-    Movie8Barracks = ({
-        --predator
-        Blain,
-        Dillon,
-        Dutch,
-        Mac,
-    })
-
-    Movie9Barracks = ({
-        Harrigan,
-        Danny,
-        LambertPred,
-        Keyes
-    })
-
-    BaseBarracks = ({
-        WarrantOfficerRipley,
-        Parker,
-        Dallas,
-        Lambert,
-        LieutenantRipley,
-        Hicks,
-        Hudson,
-        Bishop,
-        SisterRipley,
-        BrotherDillon,
-        Clemens,
-        Aaron,
-        RipleyNo8,
-        Call,
-        Johner,
-        Christie
-    })
-
-    ExpansionBarracks = ({
-        Brett,
-        Kane,
-        Gorman,
-        Drake,
-        Morse,
-        Andrews,
-        EllenRipley,
-        Vriess,
-        Elgyn
-    })
-
-    CovenantBarracks = ({
-        Daniels,
-        Oram,
-        Walter1,
-        Karine,
-        Lope,
-        Tennessee
-    })
-
-    PredatorBarracks = ({
-        Blain,
-        Dillon,
-        Dutch,
-        Mac,
-        Harrigan,
-        Danny,
-        LambertPred,
-        Keyes
-    })
-
-    AllBarracks = ({
-        Dallas,
-        Brett,
-        Kane,
-        Lambert,
-        WarrantOfficerRipley,
-        Parker,
-        LieutenantRipley,
-        Hudson,
-        Hicks,
-        Bishop,
-        Gorman,
-        Drake,
-        BrotherDillon,
-        Clemens,
-        Aaron,
-        SisterRipley,
-        Morse,
-        Andrews,
-        EllenRipley,
-        RipleyNo8,
-        Christie,
-        Johner,
-        Vriess,
-        Elgyn,
-        Call,
-        Tennessee,
-        Oram,
-        Lope,
-        Walter1,
-        Daniels,
-        Karine,
-        Blain,
-        Dillon,
-        Dutch,
-        Mac,
-        Harrigan,
-        Danny,
-        LambertPred,
-        Keyes
-    })
-
-    MovieBarracks = ({
-        Movie1Barracks,
-        Movie2Barracks,
-        Movie3Barracks,
-        Movie4Barracks,
-        AllBarracks,
-        AllBarracks,
-        Movie7Barracks,
-        Movie8Barracks,
-        Movie9Barracks,
-        CovenantBarracks,
-        AllBarracks
-    })
+    Movie1Barracks = ({ WarrantOfficerRipley, Parker, Dallas, Lambert })
+    Movie2Barracks = ({ LieutenantRipley, Hicks, Hudson, Bishop })
+    Movie3Barracks = ({ SisterRipley, BrotherDillon, Clemens, Aaron })
+    Movie4Barracks = ({ RipleyNo8, Call, Johner, Christie })
+    Movie7Barracks = ({ Daniels, Oram, Walter1, Karine })
+--predator
+    Movie8Barracks = ({ Blain, Dillon, Dutch, Mac,})
+    Movie9Barracks = ({ Harrigan, Danny, LambertPred, Keyes})
+    BaseBarracks = ({ WarrantOfficerRipley, Parker, Dallas, Lambert, LieutenantRipley, Hicks, Hudson, Bishop, SisterRipley, BrotherDillon, Clemens, Aaron, RipleyNo8, Call, Johner, Christie })
+    ExpansionBarracks = ({ Brett, Kane, Gorman, Drake, Morse, Andrews, EllenRipley, Vriess, Elgyn})
+    CovenantBarracks = ({ Daniels, Oram, Walter1, Karine, Lope, Tennessee})
+    PredatorBarracks = ({ Blain, Dillon, Dutch, Mac, Harrigan, Danny, LambertPred, Keyes })
+    AllBarracks = ({ Dallas, Brett, Kane, Lambert, WarrantOfficerRipley, Parker, LieutenantRipley, Hudson, Hicks, Bishop, Gorman, Drake, BrotherDillon, Clemens, Aaron, SisterRipley, Morse, Andrews, EllenRipley, RipleyNo8, Christie, Johner, Vriess, Elgyn, Call, Tennessee, Oram, Lope, Walter1, Daniels, Karine, Blain, Dillon, Dutch, Mac, Harrigan, Danny, LambertPred, Keyes })
+    MovieBarracks = ({ Movie1Barracks, Movie2Barracks, Movie3Barracks, Movie4Barracks, AllBarracks, AllBarracks, Movie7Barracks, Movie8Barracks, Movie9Barracks, CovenantBarracks, AllBarracks })
 
             --PLAYERS--
     --Red player
@@ -676,7 +377,7 @@ function onload()
         drawZone = RedDrawPile,
         handZone = RedHandZone,
         discardZone = RedDiscard,
-        pcolor = "Red",
+        pColor = "Red",
         playZone = RedPlayZone,
         strikeZone = RedStrikeZone})
 
@@ -733,7 +434,7 @@ function onload()
         drawZone = PurpleDrawPile,
         handZone = PurpleHandZone,
         discardZone = PurpleDiscard,
-        pcolor = "Purple",
+        pColor = "Purple",
         playZone = PurplePlayZone,
         strikeZone = PurpleStrikeZone})
 
@@ -790,7 +491,7 @@ function onload()
         drawZone = GreenDrawPile,
         handZone = GreenHandZone,
         discardZone = GreenDiscard,
-        pcolor = "Green",
+        pColor = "Green",
         playZone = GreenPlayZone,
         strikeZone = GreenStrikeZone})
 
@@ -848,7 +549,7 @@ function onload()
         drawZone = WhiteDrawPile,
         handZone = WhiteHandZone,
         discardZone = WhiteDiscard,
-        pcolor = "White",
+        pColor = "White",
         playZone = WhitePlayZone,
         strikeZone = WhiteStrikeZone})
 
@@ -909,7 +610,7 @@ function onload()
         drawZone = BlueDrawPile,
         handZone = BlueHandZone,
         discardZone = BlueDiscard,
-        pcolor = "Blue",
+        pColor = "Blue",
         playZone = BluePlayZone,
         strikeZone = BlueStrikeZone})
 
@@ -949,6 +650,7 @@ function onload()
         color          = {0, 0, 0},
         font_color     = {1, 1, 1},
     })
+    PlayerObjects = ({RedPlayer, PurplePlayer, GreenPlayer, WhitePlayer, BluePlayer})
     --end Blue player
 end
 
@@ -1010,7 +712,7 @@ function PurplePlayerPlaysHand()
 end
 
 function GreenPlayerDrawsSix()
-    if CurrentPlayer() == "Green" then
+    if GetCurrentPlayer() == "Green" then
         DrawSix(GreenPlayer)
         EndTurn()
     else
@@ -1108,14 +810,14 @@ function PlayHand(player)
         local offsetX = -7.5
         local offsetZ = 3
         for i, v in pairs(player.handZone.getObjects()) do
-          if v.tag == 'Card' then
-            v.setPosition({player.playZone.getPosition().x + offsetX, player.playZone.getPosition().y, player.playZone.getPosition().z + offsetZ}, false, true)
-            offsetX = offsetX + 3
-            if (offsetX > 10) then
-              offsetX = -7.5
-              offsetZ = offsetZ - 4
+            if v.tag == 'Card' then
+                v.setPosition({player.playZone.getPosition().x + offsetX, player.playZone.getPosition().y, player.playZone.getPosition().z + offsetZ}, false, true)
+                offsetX = offsetX + 3
+                if (offsetX > 10) then
+                    offsetX = -7.5
+                    offsetZ = offsetZ - 4
+                end
             end
-          end
         end
     end
 end
@@ -1157,7 +859,7 @@ end
 function drawSingleCard(player)
  for i, v in pairs(player.drawZone.getObjects()) do
      if v.tag == 'Deck' then
-         player.drawZone.getObjects()[1].dealToColor(1,player.pcolor)
+         player.drawZone.getObjects()[1].dealToColor(1,player.pColor)
      elseif v.tag == 'Card' then
          player.drawZone.getObjects()[1].flip()
          player.drawZone.getObjects()[1].setPositionSmooth(player.handZone.getPosition(), false, true)
@@ -1240,6 +942,7 @@ end
 --Deal the randomly chosen avatar to a player
 function DealAvatar(player, number, avatars)
     local avatar = avatars[number].getObjects()
+
     local avatarSent = false
     for i, v in pairs(avatar) do
         if v.tag == 'Deck' then
@@ -1488,7 +1191,7 @@ function ToggleRemovePlayers()
 end
 
 function StartGame()
-    GetEmptyComplex(ComplexSize) --this is called here because TTS sucks and always returns 4 on the first call even if the first empty is 5
+    GetEmptyComplex(ComplexSize, "Complex") --this is called here because TTS sucks and always returns 4 on the first call even if the first empty is 5
     RemovePlayers()
     closePanel()
     SetupButtons()
@@ -1800,7 +1503,7 @@ end
 
 function SetupAvatars()
     local count = 0
-    local avatars = ({0})
+    local avatars = ({})
     if BaseAvatarsSelected == true then
         count = count + #BaseGameAvatars
         for i, v in ipairs(BaseGameAvatars) do
@@ -2053,6 +1756,16 @@ function CompleteObjective()
         end
     end
     broadcastToAll("OBJECTIVE COMPLETE!", {r=1, g=1, b=1})
+    ObjectivesCompleted = ObjectivesCompleted + 1
+    CheckForCompletedObjectives()
+end
+
+function CheckForCompletedObjectives()
+    if ObjectivesCompleted == 1 then
+        if SentryGunsObjective == true or VentilationShaftObjective == true then
+            CompleteObjective()
+        end
+    end
 end
 
 function ScanComplex1(obj, playerColor, click)
@@ -2095,17 +1808,24 @@ function ScanComplex(comp, playerColor)
     end, 200)
 end
 
+function ScanCombatZone(card, zoneNumber)
+    if card.getDescription() ~= '' then
+        CheckCard(card, "CombatZone", zoneNumber)
+    end
+end
+
 function CheckCard(card, area, zoneNumber)
     CheckObjectives(card, area, zoneNumber)
     if card.getDescription() == "Hazard" then
         CheckHazards(card, area)
     end
     if card.getDescription() == "Event" then
-        CheckEvents(card, zoneNumber)
+        CheckEvents(card, area, zoneNumber)
     else
-        if card.getDescription() == "Jonesy" then
+        if card.getDescription() == "Jonesy" or card.getDescription() == "Newt" then
+            local name = card.getDescription()
             if area == "Complex" then
-                broadcastToAll("You found Jonesy! " .. GetCurrentPlayer() .. " chooses who will keep him!", GetCurrentPlayer())
+                broadcastToAll("You found " .. name .. "! " .. GetCurrentPlayer() .. " chooses who will gain them!", GetCurrentPlayer())
                 Wait.frames(function()
                     card.setPositionSmooth(GetPlayerObject(GetCurrentPlayer()).playZone.getPosition(), false, false)
                 end, 100)
@@ -2113,7 +1833,56 @@ function CheckCard(card, area, zoneNumber)
                 Wait.frames(function()
                     card.setPositionSmooth(DeadCharacters.getPosition(), false, false)
                 end, 100)
-                broadcastToAll("You didn't find Jonesy in time. He's dead.", GetCurrentPlayer())
+                broadcastToAll("You didn't find " .. name .. " in time. They died.", GetCurrentPlayer())
+            end
+        end
+        if card.getDescription() == "Swarmer" then
+            if card.hasAnyTag() == false then
+                if area == "Complex" then
+                    local empty = GetAllEmptyComplex(ComplexSize,"ComplexesTop")
+                    local hasCardAbove = true
+                    if #empty > 0 then
+                        for i,v in pairs(empty) do
+                            if v == zoneNumber then
+                                hasCardAbove = false
+                            end
+                        end
+                        if hasCardAbove == true then
+                            for i,v in pairs(ComplexesTop[zoneNumber].getObjects()) do
+                                if v.getDescription() == "SentryGuns" then
+                                    card.setPosition(DeadEnemies.getPosition())
+                                end
+                            end
+                        end
+                    end
+                end
+                Wait.frames(function() PushComplex(ComplexSize) end, 200)
+                broadcastToAll("Xenomorph Swarmer revealed! Adding a Hive card to the Complex.", {r=1, g=0, b=0})
+                card.addTag("Revealed")
+            end
+        end
+        if card.getDescription() == "FaceHugger" then
+            broadcastToAll(GetCurrentPlayer() .. " revealed a Face Hugger! It's now attached!", {r=1, g=0, b=0})
+            card.setPosition(GetPlayerObject(GetCurrentPlayer()).playZone.getPosition())
+        end
+        if card.getDescription() == "TheQueen" then
+            for i,v in pairs(Players) do
+                local found = TakeCostCardCaptive(GetPlayerObject(v))
+                if found == true then
+                    broadcastToAll(v .. " has a random card from their hand that cost 1 or more taken to Operations as a captive! Pay their cost to them.", v)
+                else
+                    broadcastToAll(v .. " has a random card from their hand that cost 1 or more taken to Operations as a captive! Luckily, they have no cards with a cost of 1 or more!.", v)
+                end
+            end
+        end
+        if card.getDescription() == "Carter" then
+            broadcastToAll("Carter Burke revealed! All characters in the HQ are killed and can't be replaced while Carter Burke lives.", {r=1,g=1,b=1})
+            for i,v in pairs(TheHQ) do
+                for j,k in pairs(v.getObjects()) do
+                    if k.type == 'Card' then
+                        k.setPosition(DeadCharacters.getPosition())
+                    end
+                end
             end
         end
     end
@@ -2127,7 +1896,7 @@ function CheckObjectives(card, area, zoneNumber)
             Wait.frames(function()
                 card.setPosition(Operations1.getPosition())
             end, 100)
-            broadcastToAll("Found a part of the S.O.S.! One more part to find.", {r=1, g=1, b=1})
+            broadcastToAll("Found a part of the S.O.S.! One more part to find.", {0.627, 0.125, 0.941})
         else
             for i, v in pairs(Operations1.getObjects()) do
                 if v.tag == 'Card' then
@@ -2148,7 +1917,7 @@ function CheckObjectives(card, area, zoneNumber)
             Wait.frames(function()
                 card.setPositionSmooth(DiscardedHazards.getPosition(), false, false)
              end, 100)
-            broadcastToAll("Found a second part of the S.O.S.!", {r=1, g=1, b=1})
+            broadcastToAll("Found a second part of the S.O.S.!", {0.627, 0.125, 0.941})
             Wait.frames(function()
                 CompleteObjective()
             end, 100)
@@ -2158,7 +1927,7 @@ function CheckObjectives(card, area, zoneNumber)
         Wait.frames(function()
             card.setPositionSmooth(ComplexTop5.getPosition(), false, false)
         end, 100)
-        broadcastToAll("Ventilation Seal found! Pay 2 space bucks while the Ventilation Shafts are cleared to complete the objective!", {r=1, g=1, b=1})
+        broadcastToAll("Ventilation Seal found! Pay 2 space bucks while the Ventilation Shafts are cleared to complete the objective!", {0.627, 0.125, 0.941})
         ComplexTop5.createButton({
             click_function = "BlockVentShaft",
             function_owner = Global,
@@ -2174,19 +1943,49 @@ function CheckObjectives(card, area, zoneNumber)
     end
     if description == "AirlockControls" then
         card.setPosition(ComplexTop1.getPosition())
-        broadcastToAll("Airlock Controls found! Pay 3 to move an enemy to the Airlock.", {r=1, g=1, b=1})
+        broadcastToAll("Airlock Controls found! Pay 3 to move an enemy to the Airlock.", {0.627, 0.125, 0.941})
     end
     if description == "Colonist" then
         local zone
         local clickFunction
         if area == "CombatZone" then
-            zone = CombatZones[zoneNumber]
             clickFunction = ColonistCombatZones[zoneNumber]
+            CombatZones[zoneNumber].createButton({
+                label = "Kill",
+                click_function = clickFunction,
+                function_owner = Global,
+                position       = {0, -.4, -.7},
+                rotation       = {0,180,0},
+                width          = 500,
+                height         = 100,
+                font_size      = 80,
+                color          = {0, 0, 0},
+                font_color     = {1, 1, 1},
+            })
         else
-            zone = Complexes[zoneNumber]
             clickFunction = ColonistComplexes[zoneNumber]
+            Complexes[zoneNumber].editButton({label = "Kill", click_function = clickFunction})
         end
-        zone.editButton({label = "Kill", click_function = clickFunction})
+    end
+    if description == "SentryGuns" then
+        NumberOfSentryGuns = NumberOfSentryGuns + 1
+        if NumberOfSentryGuns == 1 then
+            card.setPosition(Operations1.getPosition())
+        else
+            card.setPosition(Operations2.getPosition())
+        end
+        card.createButton({
+            click_function = "MoveSentryGun",
+            function_owner = Global,
+            label          = "Pay 2",
+            position       = {0, 2, 2.25},
+            rotation       = {0,0,0},
+            width          = 800,
+            height         = 300,
+            font_size      = 200,
+            color          = {0, 0, 0},
+            font_color     = {1, 1, 1},
+        })
     end
 end
 
@@ -2327,8 +2126,19 @@ function CheckHazards(card, area)
                     deck.takeObject().setPosition(Complexes[i].getPosition())
                 end
             end, 271)
+            --If still on objective 1, fix Colonist Hosts that are in the Complex
+            local functionCall = "ScanComplex"
+            for i,v in pairs(Complexes) do
+                if i <= 2 then
+                    v.editButton({click_function = functionCall .. i, label = "Scan 2"})
+                elseif i <= 4 then
+                    v.editButton({click_function = functionCall .. i, label = "Scan 3"})
+                else
+                    v.editButton({click_function = functionCall .. i, label = "Scan 4"})
+                end
+            end
         elseif HazardCount >= 3 then
-            broadcastToAll("Third Hazard found, ." .. GetCurrentPlayer() .. "'s Avatar taken prisoner! Pay 6 Recruit to free them!", {0.129, 0.694, 0.607})
+            broadcastToAll("Third Hazard found! " .. GetCurrentPlayer() .. "'s Avatar taken prisoner! Pay 6 Recruit to free them!", {0.129, 0.694, 0.607})
             local player = GetPlayerObject(GetCurrentPlayer())
             -- local avatar
             for i,v in pairs(player.avatarZone.getObjects()) do
@@ -2360,7 +2170,7 @@ function CheckHazards(card, area)
      end
 end
 
-function CheckEvents(card, zoneNumber)
+function CheckEvents(card, area, zoneNumber)
     local sendToDiscard = true
     local objective = GetCurrentObjective()
     if objective.guid == SOSCard then
@@ -2394,9 +2204,80 @@ function CheckEvents(card, zoneNumber)
                 end
             end
         end
+    elseif objective.guid == LostColonyCard then
+        sendToDiscard = false
+        broadcastToAll("Event! This zone now has low visibility! Scans cost twice as much!", {r=1, g=0, b=0})
+        local needFarLeft = true
+        if area == "Complex" then
+            local check = false
+            for i,v  in pairs(ComplexesTop[zoneNumber].getObjects()) do
+                if v.type == 'Card' then
+                    check = true
+                end
+            end
+            if check == false then
+                card.setPosition(ComplexesTop[zoneNumber].getPosition())
+                if card.getRotation().z > 1 then
+                    card.flip()
+                end
+                needFarLeft = false
+            end
+        end
+        local index = -1
+        if needFarLeft == true then
+            index = GetEmptyComplexReverse(ComplexSize, "ComplexesTop")
+            if index == 0 then
+                sendToDiscard = true
+            else
+                card.setPosition(ComplexesTop[index].getPosition())
+            end
+        end
+        if index == -1 then
+            index = zoneNumber
+        end
+
+        if index <= 2 then
+            Complexes[index].editButton({label = "Scan 4"})
+        elseif index <= 4 then
+            Complexes[index].editButton({label = "Scan 6"})
+        else
+            Complexes[index].editButton({label = "Scan 8"})
+        end
+    elseif objective.guid == MostlyComeAtNightCard then
+        if #getSeatedPlayers() == 1 then
+            broadcastToAll("Event! Gain two strikes!", {r=1, g=0, b=0})
+            GainStrike(nil, GetCurrentPlayer(), nil)
+            GainStrike(nil, GetCurrentPlayer(), nil)
+        else
+            broadcastToAll("Event! Choose a player to gain two strikes!", {r=1, g=0, b=0})
+            for i,v in pairs(Players) do
+                if v ~= GetCurrentPlayer() then
+                    local player = GetPlayerObject(v)
+                    player.playZone.createButton({
+                        click_function = "Gain2Strikes",
+                        function_owner = Global,
+                        label          = "Gain 2 Strikes",
+                        position       = {0, 0, 0},
+                        rotation       = {0,180,0},
+                        width          = 500,
+                        height         = 300,
+                        font_size      = 70,
+                        color          = {0, 0, 0},
+                        font_color     = v,
+                    })
+                end
+            end
+        end
+    elseif objective.guid == WhosLayingEggsCard then
+        local taken = TakeCostCardCaptive(GetPlayerObject(GetNextPlayer()))
+        if take == true then
+            broadcastToAll("Event! " .. GetNextPlayer() .. " has a random card from their hand that cost 1 or more taken to Operations as a captive! Pay their cost to them.", {r=1, g=0, b=0})
+        else
+            broadcastToAll("Event! " .. GetNextPlayer() .. " has a random card from their hand that cost 1 or more taken to Operations as a captive! Luckily, they have no cards with a cost of 1 or more!.", {r=1, g=0, b=0})
+        end
     end
 
-    --check for eggs on the board
+    --check for eggs and colonists on the board
     for i,v in pairs(PlayZones) do
         for j,k in pairs(v.getObjects()) do
             if k.type == 'Card' then
@@ -2413,7 +2294,47 @@ function CheckEvents(card, zoneNumber)
                         faceHugger.setPositionSmooth(GetPlayerObject(GetCurrentPlayer()).playZone.getPosition(), false, false)
                         broadcastToAll("AN EGG HAS HATCHED AND RELEASED A FACEHUGGER ON " .. GetCurrentPlayer() .. "! YOU HAVE ONE TURN TO KILL IT! \n(return dead facehuggers to hatchery, not to 'Dead Enemies')", {r=1, g=0, b=0})
                     elseif k.getDescription() == "Colonist" then
-
+                        broadcastToAll("Colonist Host killed during the event, replacing with top card of the Hive", {r=1, g=0, b=0})
+                        area = "Complex"
+                        if v == Complex1 then
+                            zoneNumber = 1
+                        elseif v == Complex2 then
+                            zoneNumber = 2
+                        elseif v == Complex3 then
+                            zoneNumber = 3
+                        elseif v == Complex4 then
+                            zoneNumber = 4
+                        elseif v == Complex5 then
+                            zoneNumber = 5
+                        else
+                            area = "CombatZone"
+                            if v == CombatZone1 then
+                                zoneNumber = 1
+                            elseif v == CombatZone2 then
+                                zoneNumber = 2
+                            elseif v == CombatZone3 then
+                                zoneNumber = 3
+                            end
+                        end
+                        ColonistComplex(zoneNumber, area)
+                        local zone
+                        if area == "Complex" then
+                            zone = Complexes
+                        else
+                            zone = CombatZones
+                        end
+                        for z,x in pairs(Hive.getObjects()) do
+                            if x.type == 'Deck' then
+                                local topCard = x.takeObject()
+                                topCard.setPosition(zone[zoneNumber].getPosition())
+                                topCard.flip()
+                                if area == "CombatZone" then
+                                    Wait.frames(function()
+                                        ScanCombatZone(topCard, zoneNumber)
+                                    end, 200)
+                                end
+                            end
+                        end
                     end
                 end
             end
@@ -2451,6 +2372,20 @@ function GainStrike(obj, playerColor, click)
     end
 end
 
+function Gain2Strikes(obj, playerColor, click)
+    for i,v in pairs(Players) do
+        if v ~= GetCurrentPlayer() then
+            GetPlayerObject(v).playZone.removeButton(0)
+        end
+    end
+    for i,v in pairs(PlayerObjects) do
+        if obj == v.playZone then
+            GainStrike(nil, v.pColor, nil)
+            GainStrike(nil, v.pColor, nil)
+        end
+    end
+end
+
 function DiscardRandomCard(playerColor)
     local player = GetPlayerObject(playerColor)
     local handZone = player.handZone.getObjects()
@@ -2476,6 +2411,66 @@ function IsCardAttack(card)
     return false
 end
 
+function MoveSentryGun(obj, playerColor, click)
+    local emptyComplex = GetAllEmptyComplex(ComplexSize,"Complex")
+    local emptyTop = GetAllEmptyComplex(ComplexSize,"ComplexesTop")
+    local empty = {}
+    for i,v in pairs(emptyComplex) do
+        for j,k in pairs(emptyTop) do
+            if k == v then
+                table.insert(empty, v)
+            end
+        end
+    end
+    if #empty < 1 then
+        broadcastToAll("No available space to move Sentry Gun ", {0.627, 0.125, 0.941})
+        return
+    end
+    obj.removeButton(0)
+    SentryGun = obj
+    for i,v in pairs(empty) do
+        ComplexesTop[v].createButton({
+            click_function = "PlaceSentryGun",
+            function_owner = Global,
+            label          = "Place Sentry Gun",
+            position       = {0, -.4, 0},
+            rotation       = {0,180,0},
+            width          = 700,
+            height         = 100,
+            font_size      = 70,
+            color          = {0, 0, 0},
+            font_color     = {1, 1, 1},
+        })
+    end
+end
+
+function PlaceSentryGun(obj, playerColor, click)
+    local emptyComplex = GetAllEmptyComplex(ComplexSize,"Complex")
+    local emptyTop = GetAllEmptyComplex(ComplexSize,"ComplexesTop")
+    local empty = {}
+    for i,v in pairs(emptyComplex) do
+        for j,k in pairs(emptyTop) do
+            if k == v then
+                table.insert(empty, v)
+            end
+        end
+    end
+    SentryGun.setPosition(obj.getPosition())
+    for i,v in pairs(empty) do
+        ComplexesTop[v].removeButton(0)
+    end
+    SentryGunsPlaced = SentryGunsPlaced + 1
+    if SentryGunsPlaced == 2 then
+        broadcastToAll("Both Sentry Guns placed!", {0.627, 0.125, 0.941})
+        SentryGunsObjective = true
+        if ObjectivesCompleted == 1 then
+            CompleteObjective()
+        end
+    else
+        broadcastToAll("First Sentry Gun placed!", {0.627, 0.125, 0.941})
+    end
+end
+
 function FreeAvatar()
     Operations2.removeButton(0)
     local player = GetPlayerObject(PrisonedAvatarPlayer)
@@ -2484,6 +2479,121 @@ function FreeAvatar()
         if v.type == 'Card' then
             v.setPosition(player.avatarZone.getPosition())
         end
+    end
+end
+
+function FreeCaptive(obj, playerColor, click)
+    broadcastToAll(playerColor .." has freed the captive!", {1, 1, 1})
+    obj.setPositionSmooth(GetPlayerObject(playerColor).discardZone.getPosition(), false, false)
+    obj.removeButton(0)
+end
+
+function TakeCostCardCaptive(player)
+    local costCards = ({})
+    for i,v in pairs(player.handZone.getObjects()) do
+        local desc = v.getDescription()
+        if desc == 'Cost' or desc == 'Attack' or desc == 'Money' or desc == 'Newt' or desc == 'Jonesy' or desc == 'AttackMoney' then
+            table.insert(costCards, v)
+        end
+    end
+    if #costCards >= 1 then
+        math.randomseed(os.time())
+        local number = math.random(#costCards)
+        costCards[number].setPosition(Operations1.getPosition())
+        costCards[number].createButton({
+            click_function = "FreeCaptive",
+            function_owner = Global,
+            label          = "Pay cost",
+            position       = {0, 2, 2.25},
+            rotation       = {0,0,0},
+            width          = 800,
+            height         = 300,
+            font_size      = 200,
+            color          = {0, 0, 0},
+            font_color     = {1, 1, 1},
+        })
+        return true
+    else
+        return false
+    end
+end
+
+function ColonistComplex1()
+    ColonistComplex(1, "Complex")
+end
+
+function ColonistComplex2()
+    ColonistComplex(2, "Complex")
+end
+
+function ColonistComplex3()
+    ColonistComplex(3, "Complex")
+end
+
+function ColonistComplex4()
+    ColonistComplex(4, "Complex")
+end
+
+function ColonistComplex5()
+    ColonistComplex(5, "Complex")
+end
+
+function ColonistCombatZone1()
+    ColonistComplex(1, "Combat")
+end
+
+function ColonistCombatZone2()
+    ColonistComplex(2, "Combat")
+end
+
+function ColonistCombatZone3()
+    ColonistComplex(3, "Combat")
+end
+
+function ColonistComplex(zoneNumber, area)
+    ColonistsKilled = ColonistsKilled + 1
+
+    local colonist
+    local objects
+
+    if area == "Complex" then
+        objects = Complexes[zoneNumber].getObjects()
+        Complexes[zoneNumber].editButton({label = ComplexButtonLabels[zoneNumber], click_function = ComplexButtonClickFunctions[zoneNumber]})
+    else
+        objects = CombatZones[zoneNumber].getObjects()
+        CombatZones[zoneNumber].removeButton(0)
+    end
+    for i, v in pairs(objects) do
+        if v.getDescription() == 'Colonist' then
+            v.setPosition(DeadEnemies.getPosition())
+        end
+    end
+    if ColonistsKilled >= 4 then
+        return
+    end
+    broadcastToAll(ColonistsKilled .. " Colonist Host's killed!", {r=1, g=1, b=1})
+    if ColonistsKilled == 3 then
+        CompleteObjective()
+        --Clear out Event cards from the top row
+        Wait.frames(function()
+            broadcastToAll("Low visibility rooms cleared.", {r=1, g=0, b=0})
+            for i,v in pairs(ComplexesTop) do
+                for j,k in pairs(v.getObjects()) do
+                    if k.getDescription() == 'Event' then
+                        k.setPosition(DiscardedHazards.getPosition())
+                        local lab
+                        if i <= 2 then
+                            lab = "Scan 2"
+                        elseif i <= 4 then
+                            lab = "Scan 3"
+                        else
+                            lab = "Scan 4"
+                        end
+                        Complexes[i].editButton({label = lab})
+                    end
+                end
+            end
+        end, 200)
     end
 end
 
@@ -2511,7 +2621,10 @@ function BlockVentShaft()
         end
     end, 100)
     broadcastToAll("The Ventilation Shaft has been blocked!", {r=1, g=1, b=1})
-    CompleteObjective()
+    VentilationShaftObjective = true
+    if ObjectivesCompleted == 1 then
+        CompleteObjective()
+    end
 end
 
 function PushComplexButton()
@@ -2521,8 +2634,7 @@ end
 function PushComplex(index)
     local found = false
     local loc = nil
-    local emptyIndex = GetEmptyComplex(index)
-
+    local emptyIndex = GetEmptyComplex(index, "Complex")
     if emptyIndex == index then
         PushFinalize(index)
         return
@@ -2534,10 +2646,11 @@ function PushComplex(index)
                 if (v.getDescription() == "Egg" or v.getDescription() == "Colonist") and v.getRotation().z < 1 then
                     break
                 end
-                local zone = RotateCombatZone(v)
+
                 if v.getRotation().z > 1 then
                     v.flip()
                 end
+                local zone = RotateCombatZone(v)
                 if v.getDescription() ~= '' then
                     CheckCard(v, "CombatZone", zone)
                 end
@@ -2552,11 +2665,11 @@ function PushComplex(index)
                     if (v.getDescription() == "Egg" or v.getDescription() == "Colonist") and v.getRotation().z < 1 then
                         break
                     else
-                        local zone = RotateCombatZone(v)
                         emptyIndex = i
                         if v.getRotation().z > 1 then
                             v.flip()
                         end
+                        local zone = RotateCombatZone(v)
                         if v.getDescription() ~= '' then
                             CheckCard(v, "CombatZone", zone)
                         end
@@ -2566,6 +2679,7 @@ function PushComplex(index)
             end
         end
     end
+
     ::continue::
     if emptyIndex == 0 then
         PushFinalize(emptyIndex)
@@ -2602,12 +2716,18 @@ function PushComplex(index)
     end
 end
 
-function GetEmptyComplex(index)
+function GetEmptyComplex(index, complex)
+    local complexZone
+    if complex == "Complex" then
+        complexZone = Complexes
+    elseif complex == "ComplexesTop" then
+        complexZone = ComplexesTop
+    end
     for i = 0, index do
         if index - i == 0 then
             break
         end
-        for j, v in pairs(Complexes[index - i].getObjects()) do
+        for j, v in pairs(complexZone[index - i].getObjects()) do
             if v.type == 'Card' or v.type == 'Deck' then
                 found = true
             end
@@ -2618,6 +2738,49 @@ function GetEmptyComplex(index)
         found = false
     end
     return 0
+end
+
+function GetEmptyComplexReverse(index, complex)
+    local complexZone
+    if complex == "Complex" then
+        complexZone = Complexes
+    elseif complex == "ComplexesTop" then
+        complexZone = ComplexesTop
+    end
+    for i = 1, index do
+        for j, v in pairs(complexZone[i].getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                found = true
+            end
+        end
+        if found == false then
+            return i
+        end
+        found = false
+    end
+    return 0
+end
+
+function GetAllEmptyComplex(index, complex)
+    local complexZone
+    if complex == "Complex" then
+        complexZone = Complexes
+    elseif complex == "ComplexesTop" then
+        complexZone = ComplexesTop
+    end
+    local zones = {}
+    for i = 1, index do
+        for j, v in pairs(complexZone[i].getObjects()) do
+            if v.type == 'Card' or v.type == 'Deck' then
+                found = true
+            end
+        end
+        if found == false then
+            table.insert(zones, i)
+        end
+        found = false
+    end
+    return zones
 end
 
 function PushFinalize(index)
